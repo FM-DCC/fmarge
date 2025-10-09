@@ -1,11 +1,11 @@
 package marge.syntax
 
 import marge.backend.RxSemantics
-import marge.syntax.Program2.EdgeMap
+import marge.syntax.Syntax.EdgeMap
 
 import scala.annotation.tailrec
 
-object Program2:
+object Syntax:
 
   type Rel[A,B] = Map[A,Set[B]]
   def empty[A,B] = Map[A,Set[B]]().withDefaultValue(Set())
@@ -36,12 +36,6 @@ object Program2:
   type Edge = (QName,QName,QName) //from,to,by
   type Edges = Set[Edge]
   type EdgeMap = Rel[QName,(QName,QName)] // optimised structure for set of edges
-  def showEdge(e:Edge): String =
-    s"${e._1}-${e._2}${if e._3.n.nonEmpty then s":${e._3}" else ""}"
-  def showEdges(abc:Edges): String =
-    abc.map(showEdge).mkString(", ")
-  private def showEdges(abc:EdgeMap): String =
-    showEdges(for (a,bcs) <- abc.toSet; (b,c)<-bcs yield (a,b,c))
 
   /**
    * Reactive graph.
@@ -59,11 +53,7 @@ object Program2:
                      inits: Set[QName],
                      act: Edges):
 
-    def showSimple: String =
-      s"[at] ${inits.mkString(",")} [active] ${showEdges(act)}"
-    override def toString: String =
-      s"[init]  ${inits.mkString(",")}\n[act]   ${showEdges(act)}\n[edges] ${
-        showEdges(edg)}\n[on]    ${showEdges(on)}\n[off]   ${showEdges(off)}"
+    override def toString: String = Show(this)
 
     def states =
       for (src,dests)<-edg.toSet; (d,_)<-dests; st <- Set(src,d) yield st
@@ -118,9 +108,22 @@ object Program2:
         then s"  $a2 $line$tip $b2\n"+
              s"  linkStyle ${fresh()} $style\n"
         else if simple
-        then s"  $a2 $line$tip |$c| $b2\n"+
-             s"  linkStyle ${fresh()} $style\n"
-        else s"  $a2 $line $a$b$c( ) $line$tip |$c| $b2\n" +
+        then {
+          def getEName(from:QName,to:(QName,QName)) = (from,to._1,to._2) match
+            case (_,_,QName(Nil)) => ""
+            case (_,_,QName(List(""))) => ""
+            case e if rx.act(e) => s"[${to._2}]" // active
+            case _ => s"(${to._2})" // not active
+          val add = rx.on(c)
+          val addStr = if add.isEmpty then ""
+                       else " | +" + add.map(x=>s"${x._1}${getEName(c,x)}").mkString(",")
+          val drop = rx.off(c)
+          val dropStr = if drop.isEmpty then ""
+                        else " | -" + drop.map(x=>s"${x._1}${getEName(c,x)}").mkString(",")
+          val debug = "" //s"${rx.act.toString}"
+          s"  $a2 $line$tip |\"$c$addStr$dropStr$debug\"| $b2\n"+
+          s"  linkStyle ${fresh()} $style\n"
+        } else s"  $a2 $line $a$b$c( ) $line$tip |$c| $b2\n" +
              s"  style $a$b$c width: 0\n"+
              s"  linkStyle ${fresh()} $style\n"+
              s"  linkStyle ${fresh()} $style\n"

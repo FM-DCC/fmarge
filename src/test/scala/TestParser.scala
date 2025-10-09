@@ -1,6 +1,5 @@
 class TestParser extends munit.FunSuite {
   import marge.syntax.*
-  import Program.*
   import Term.*
 
   test("example test that succeeds") {

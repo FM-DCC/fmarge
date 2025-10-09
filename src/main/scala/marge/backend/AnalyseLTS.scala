@@ -1,6 +1,7 @@
 package marge.backend
 
-import marge.syntax.Program2.{Edges, RxGraph,showEdges,QName,Edge}
+import marge.syntax.Syntax.{Edges, RxGraph,QName,Edge}
+import marge.syntax.Show
 
 object AnalyseLTS:
 
@@ -38,7 +39,7 @@ object AnalyseLTS:
               (if missingStates.nonEmpty // error 2: unreachable states
                then List(s"Unreachable state(s): ${missingStates.mkString(",")}") else Nil) :::
               (if missingEdges.nonEmpty  // error 3: unreachable edges
-                then List(s"Unreachable edge(s): ${showEdges(missingEdges)}") else Nil) ::: probs
+                then List(s"Unreachable edge(s): ${Show(missingEdges)}") else Nil) ::: probs
             )
         case Some(st) if done contains st =>
           aux(next-st,done,nEdges,fired,probs,limit)
@@ -55,9 +56,9 @@ object AnalyseLTS:
             val shared = toAct.intersect(toDeact)
             if shared.nonEmpty then
               val triggers = RxSemantics.from(e,st) -- shared
-              incons = incons + s"activating and deactivating `${showEdges(shared)}` by `${showEdges(triggers)}`"
+              incons = incons + s"activating and deactivating `${Show(shared)}` by `${Show(triggers)}`"
           var newProbs = probs
-          if more.isEmpty then newProbs ::= s"Deadlock found: ${st.showSimple}"
+          if more.isEmpty then newProbs ::= s"Deadlock found: ${Show.simple(st)}"
           if incons.nonEmpty then newProbs ::= s"Found inconsistency: ${incons.mkString(", ")}"
           aux((next-st)++more.map(_._2), done+st, nEdges+nEdges2,fired++newEdges++moreEdges,newProbs,limit-nEdges2)
 

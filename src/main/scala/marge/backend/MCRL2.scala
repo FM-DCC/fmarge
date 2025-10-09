@@ -1,8 +1,7 @@
 package marge.backend
 
-import marge.frontend.Examples
-import marge.syntax.Parser2
-import marge.syntax.Program2.{QName, RxGraph}
+import marge.syntax.Parser
+import marge.syntax.Syntax.{QName, RxGraph}
 
 object MCRL2:
   def apply(rx: RxGraph): String =
@@ -102,6 +101,6 @@ object MCRL2:
         +s"deact_${mkMAction(trg._1)}" ))
     acts
 
-  val testRX: RxGraph = Parser2.parseProgram("init pay\npay --> select : insert_coin\nselect --> soda : ask_soda\nselect --> beer : ask_beer\nsoda --> pay : get_soda\nbeer --> pay : get_beer\n\nask_soda --! ask_soda : noSoda disabled\nask_beer --! ask_beer : noBeer\nask_soda ->> noSoda")
+  val testRX: RxGraph = Parser.parseProgram("init pay\npay --> select : insert_coin\nselect --> soda : ask_soda\nselect --> beer : ask_beer\nsoda --> pay : get_soda\nbeer --> pay : get_beer\n\nask_soda --! ask_soda : noSoda disabled\nask_beer --! ask_beer : noBeer\nask_soda ->> noSoda")
 
 

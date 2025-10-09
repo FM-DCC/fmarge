@@ -1,6 +1,6 @@
 package marge.backend
 
-import marge.syntax.Program2.{Edge, Edges, QName, RxGraph}
+import marge.syntax.Syntax.{Edge, Edges, QName, RxGraph}
 import caos.sos.SOS
 
 import scala.annotation.tailrec
