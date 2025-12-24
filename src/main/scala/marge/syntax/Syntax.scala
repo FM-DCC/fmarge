@@ -28,6 +28,8 @@ object Syntax:
       es.map((x,y,z)=>(this/x,this/y,this/z))
     def /-(ns:Set[QName]): Set[QName] =
       ns.map(n => this/n)
+//    def /-(ns:List[QName]): List[QName] =
+//      ns.map(n => this/n)
     def /(rx: RxGraph): RxGraph =
         RxGraph(this/rx.edg, this/rx.on, this/rx.off, this/-rx.lbls,
           this/-rx.inits, this/rx.act)
@@ -50,10 +52,10 @@ object Syntax:
   case class RxGraph(edg:EdgeMap,
                      on:EdgeMap, off: EdgeMap,
                      lbls: Map[QName,Edges],
-                     inits: Set[QName],
+                     inits: Set[QName], // List?
                      act: Edges):
 
-    override def toString: String = Show(this)
+    //override def toString: String = Show(this)
 
     def states =
       for (src,dests)<-edg.toSet; (d,_)<-dests; st <- Set(src,d) yield st
@@ -67,7 +69,7 @@ object Syntax:
     def deactivate(l1:QName,l2:QName,l3:QName) =
       this.copy(act = act-((l1,l2,l3)))
     def addInit(s:QName) =
-      this.copy(inits = inits+s)
+      this.copy(inits = inits+s) // s::inits
     def ++(r:RxGraph) =
       RxGraph(join(edg,r.edg),join(on,r.on),join(off,r.off),join(lbls,r.lbls),inits++r.inits,act++r.act)
 
@@ -76,7 +78,7 @@ object Syntax:
     /** Initialises a RxGraph with default values */
     def apply(): RxGraph = RxGraph(
       Map().withDefaultValue(Set()),Map().withDefaultValue(Set()),
-      Map().withDefaultValue(Set()),Map().withDefaultValue(Set()),Set(),Set())
+      Map().withDefaultValue(Set()),Map().withDefaultValue(Set()),/*Nil*/Set(),Set())
 
     /** Generates a mermaid graph with all edges */
     def toMermaid(rx: RxGraph): String =

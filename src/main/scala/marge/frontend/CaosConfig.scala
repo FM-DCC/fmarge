@@ -5,12 +5,13 @@ import caos.frontend.{Configurator, Documentation}
 import caos.sos.SOS
 import caos.view.*
 import marge.backend.*
-import marge.syntax.{Parser, Syntax}
-import marge.syntax.Syntax.RxGraph
+import marge.syntax.{Parser, Show, Syntax}
+//import marge.syntax.Syntax.RxGraph
+import marge.syntax.FRTS.FRTS
 import marge.backend.RxSemantics
 
 /** Object used to configure which analysis appear in the browser */
-object CaosConfig extends Configurator[RxGraph]:
+object CaosConfig extends Configurator[FRTS]:
   val name = "Animator of Labelled Reactive Graphs"
   override val languageName: String = "Input Reactive Graphs"
 
@@ -18,7 +19,7 @@ object CaosConfig extends Configurator[RxGraph]:
 
   /** Examples of programs that the user can choose from. The first is the default one. */
   val examples = List(
-    "Simple" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a: offA"
+    "Simple" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a"
       -> "Basic example",
     "Counter" -> "init s0\ns0 --> s0 : act\nact --! act : offAct disabled\nact ->> offAct : on1 disabled\nact ->> on1"
       -> "turns off a transition after 3 times.",
@@ -31,43 +32,58 @@ object CaosConfig extends Configurator[RxGraph]:
     "Intrusive product" -> "aut s {\n  init 0\n  0 --> 1 : a\n  1 --> 2 : b\n  2 --> 0 : d disabled\n  a --! b\n}\naut w {\n  init 0\n  0 --> 1 : a\n  1 --> 0 : c\n  a --! a : noAs disabled\n  a ->> noAs\n}\n// intrusion\nw.c ->> s.b",
     "Conflict" -> "init 0\n0 --> 1: a\n1 --> 2: b\n2 --> 3: c disabled\n\na ->> b: on\non --! b: off"
       -> "Possible conflict detected in the analysis.",
+    "Higher-edge" -> "init 0\n0 --> 1: a\n1 --> 2: b disabled\n2 --> 3: c disabled\na ->> b: on\non ->> c: off"
+      -> "Example of a hyper-edge from a higher level (from another hyper-edge).",
     "Dependencies" -> "aut A {\n  init 0\n  0 --> 1: look\n  1 --> 0: restart\n}\n\naut B {\n  init 0\n  0 --> 1: on\n  1 --> 2: goLeft disabled\n  1 --> 2: goRight disabled\n  goLeft --#-- goRight\n  2 --> 0: off\n}\n\n// dependencies\nA.look ----> B.goLeft\nA.look ----> B.goRight"
       -> "Experimental syntax to describe dependencies, currently only as syntactic sugar.",
     "Dynamic SPL" -> "init setup\nsetup --> setup : Safe\nsetup --> setup : Unsafe\nsetup --> setup : Encrypt\nsetup --> setup : Dencrypt\nsetup --> ready\nready --> setup\nready --> received : Receive\nreceived --> routed_safe : ERoute  disabled\nreceived --> routed_unsafe : Route\nrouted_safe --> sent : ESend       disabled\nrouted_unsafe --> sent : Send\nrouted_unsafe --> sent_encrypt : ESend disabled\nsent_encrypt --> ready : Ready\nsent --> ready : Ready\n\nSafe ->> ERoute\nSafe --! Route\nUnsafe --! ERoute\nUnsafe ->> Route\nEncrypt --! Send\nEncrypt ->> ESend\nDencrypt ->> Send\nDencrypt --! ESend"
-      -> "Example of a Dynamic Software Product Line, borrowed from Fig 1 in Maxime Cordy et al. <em>Model Checking Adaptive Software with Featured Transition Systems</em>"
+      -> "Example of a Dynamic Software Product Line, borrowed from Fig 1 in Maxime Cordy et al. <em>Model Checking Adaptive Software with Featured Transition Systems</em>",
+    "NFA-DFA" -> "init 0\n0 --> 1: 0\n1 --> 0: 0\n1 --> 3: 1\n2 --> 1: 0\n2 --> 3: 1\n4 --> 3: 0\n4 --> 3: 1\n0 --> 3: 1\n3 --> 5: 0\n3 --> 5: 1\n5 --> 5: 0\n5 --> 5: 1"
+      -> "Experimenting with determinisatoin and minimisation of automata",
+    "par-exp" -> "aut a {\n  init 0\n  0 --> 1 : a disabled\n}\naut b {\n  init 0\n  0 --> 1 : b0\n  1 --> 0 : b disabled\n}\naut c {\n  init 0\n  0 --> 1 : c0\n  1 --> 0 : c disabled\n}\n// intrusion\nb.b  ->> a.a\nc.c  ->> a.a\nb.b0 ->> c.c\nc.c0 ->> b.b\nb.b0 --#-- c.c0"
+      -> "Experiments with multiple components."
   )
 
    /** Description of the widgets that appear in the dashboard. */
    val widgets = List(
-     "View State" -> view[RxGraph](_.toString, Text),
+//     "View State" -> view[FRTS](_.toString, Text).expand,
+//     "View State" -> view[FRTS](Show.apply, Text).expand,
      // "View debug (simpler)" -> view[RxGraph](RxGraph.toMermaidPlain, Text).expand,
      // "View debug (complx)" -> view[RxGraph](RxGraph.toMermaid, Text).expand,
-     "Step-by-step" -> steps((e:RxGraph)=>e, RxSemantics, RxGraph.toMermaid, _.show, Mermaid).expand,
-     "Step-by-step (simpler)" -> steps((e:RxGraph)=>e, RxSemantics, RxGraph.toMermaidPlain, _.show, Mermaid).expand,
-     "Step-by-step (txt)" -> steps((e:RxGraph)=>e, RxSemantics, _.toString, _.show, Text),
-//     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
-     "All steps" -> lts((e:RxGraph)=>e, RxSemantics, x => x.inits.mkString(","), _.toString),
-     "Possible problems" -> view(r=>AnalyseLTS.randomWalk(r)._4 match
-        case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
-        case m => m.mkString("\n")
-       , Text),
-     "Number of states and edges"
-      -> view((e:RxGraph) => {
-          val (st,eds,done) = SOS.traverse(RxSemantics,e,2000)
-          s"== Reactive Graph ==\nstates: ${
-            e.states.size
-          }\nsimple edges: ${
-            (for (_,dests) <- e.edg yield dests.size).sum
-          }\nhyper edges: ${
-            (for (_,dests) <- e.on yield dests.size).sum +
-            (for (_,dests) <- e.off yield dests.size).sum
-          }\n== Encoded LTS ==\n" +
-          (if !done then s"Stopped after traversing 2000 states"
-           else s"States: ${st.size}\nEdges: $eds")
-        },
-        Text),
-     "mCRL2 experiments"
-     -> view(MCRL2.apply, Text),
+     "Step-by-step" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaid, _.show, Mermaid).expand,
+     "Step-by-step (simpler)" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaidPlain, _.show, Mermaid).expand,
+//     "Step-by-step DB" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaid, _.show, Text).expand,
+//     "Step-by-step DB (simpler)" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaidPlain, _.show, Text).expand,
+     "Step-by-step (txt)" -> steps((e:FRTS)=>e, FRTSSemantics, Show.apply, _.show, Text),
+////     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
+     "All steps" -> lts((e:FRTS)=>e, FRTSSemantics, x => x.inits.toString, _.toString),
+//     "All steps (DFA)" -> lts((e:RxGraph)=>Set(e), caos.sos.ToDFA(RxSemantics), x => x.map(_.inits.mkString(",")).mkString("-"), _.toString),
+////     "All steps (Min DFA)" -> lts((e:RxGraph)=>Set(e), caos.sos.ToDFA.minLTS(RxSemantics), x => x.map(_.inits.mkString(",")).mkString("-"), _.toString),
+//     "Possible problems" -> view(r=>AnalyseLTS.randomWalk(r)._4 match
+//        case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
+//        case m => m.mkString("\n")
+//       , Text),
+//     "Number of states and edges"
+//      -> view((e:RxGraph) => {
+//          val (st,eds,done) = SOS.traverse(RxSemantics,e,2000)
+//          val (stD, edsD, doneD) = SOS.traverse(caos.sos.ToDFA(RxSemantics), Set(e), 2000)
+//          s"== Reactive Graph ==\nstates: ${
+//            e.states.size
+//          }\nsimple edges: ${
+//            (for (_,dests) <- e.edg yield dests.size).sum
+//          }\nhyper edges: ${
+//            (for (_,dests) <- e.on yield dests.size).sum +
+//            (for (_,dests) <- e.off yield dests.size).sum
+//          }\n== Encoded LTS ==\n" +
+//          (if !done then s"Stopped after traversing 2000 states"
+//           else s"States: ${st.size}\nEdges: $eds") +
+//          "\n== Encoded DFA ==\n" +
+//            (if !doneD then s"Stopped after traversing 2000 states"
+//            else s"States: ${stD.size}\nEdges: $edsD")
+//        },
+//        Text),
+//     "mCRL2 experiments"
+//     -> view(MCRL2.apply, Text),
 
    )
 

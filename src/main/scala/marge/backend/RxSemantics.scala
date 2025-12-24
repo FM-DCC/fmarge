@@ -32,7 +32,7 @@ object RxSemantics extends SOS[QName,RxGraph] {
 
   /** Calulates the next possible init states */
   def next[Name >: QName](rx: RxGraph): Set[(Name, RxGraph)] =
-    for st <- rx.inits
+    for st <- rx.inits.toSet
         (st2, lbl) <- rx.edg(st) if rx.act((st, st2, lbl))
     yield
       val (toAct, toDeact) = toOnOff((st, st2, lbl), rx)

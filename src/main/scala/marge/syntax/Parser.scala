@@ -3,17 +3,18 @@ package marge.syntax
 import cats.parse.Parser.*
 import cats.parse.{LocationMap, Parser as P, Parser0 as P0}
 import cats.parse.Rfc5234.{alpha, digit, sp}
-import marge.syntax.Syntax.{QName, RxGraph}
+//import marge.syntax.Syntax.{QName, RxGraph}
+import marge.syntax.FRTS.{QName, FRTS, XFRTS}
 
 import scala.sys.error
 
 object Parser :
 
   // /** Parse a command  */
-  def parseProgram(str:String):RxGraph =
+  def parseProgram(str:String):FRTS =
     pp(program,str) match
       case Left(e) => error(e)
-      case Right(c) => c
+      case Right(c) => c.toFRTS
 
   /** Applies a parser to a string, and prettifies the error message */
   def pp[A](parser:P[A], str:String): Either[String,A] =
@@ -48,6 +49,8 @@ object Parser :
     (charIn('a' to 'z') ~ alphaDigit.rep0).string
   def procName: P[String] =
     (charIn('A' to 'Z') ~ alphaDigit.rep0).string
+  def anyName: P[String] =
+    ((charIn('a' to 'z') | charIn('A' to 'Z')) ~ alphaDigit.rep0).string
   private def symbols: P[String] =
   // symbols starting with "--" are meant for syntactic sugar of arrows, and ignored as symbols of terms
     P.not(string("--")).with1 *>
@@ -57,51 +60,55 @@ object Parser :
 
   /////
 
-  def program: P[RxGraph] =
+  def program: P[XFRTS] =
     sps.with1 *> statements <* sps
 
-  def statements: P[RxGraph] = P.recursive(rx =>
+  def statements: P[XFRTS] = P.recursive(rx =>
     statement(rx).repSep(sps)
-      .map(res => res.toList.fold(RxGraph())(_ ++ _))
+      .map(res => res.toList.fold(XFRTS())(_ ++ _))
   )
-  def statement(rx:P[RxGraph]): P[RxGraph] =
+  def statement(rx:P[XFRTS]): P[XFRTS] =
     init | aut(rx) | edge
-  def init: P[RxGraph] =
+  def init: P[XFRTS] =
     (string("init") *> sps *> qname) // <* (sps<*char(';')))
-      .map(RxGraph().addInit(_))
-  def aut(rx:P[RxGraph]): P[RxGraph] =
+      .map(XFRTS().addInit(_))
+  def aut(rx:P[XFRTS]): P[XFRTS] =
     ((string("aut") *> sps *> qname) ~
       (sps *> char('{') *> sps *> (rx <* sps <* char('}')))
     ).map(x => x._1 / x._2)
 
-  def edge: P[RxGraph] =
-    (qname ~ // n1
+  def edge: P[XFRTS] =
+    ( (alias <* sps).?.with1 ~ // optional alias
+      qname ~ // n1
       arrow.surroundedBy(sps) ~ // n2
       (qname <* sps) ~ // ar
       ((char(':') *> sps *> (qname <* sps))).? ~ // mn3
       string("disabled").? // off
       //      <* char(';')))
     ).map{
-        case ((((n1,ar),n2),mn3),None) =>
-          ar(n1,n2,mn3.getOrElse(QName(List())))
-        case ((((n1, ar), n2), mn3), Some(_)) =>
-          ar(n1,n2,mn3.getOrElse(QName(List())))
+        case (((((al,n1),ar),n2),mn3),None) =>
+          ar(al,n1,n2,mn3.getOrElse(QName(List())))
+        case (((((al,n1), ar), n2), mn3), Some(_)) =>
+          ar(al,n1,n2,mn3.getOrElse(QName(List())))
             .deactivate(n1, n2, mn3.getOrElse(QName(List())))
     }
+
+  def alias: P[String] =
+    char('[') *> sps *> (anyName <* sps <* char(']'))
 
   def qname: P[QName] =
     alphaDigit.rep.string.repSep(char('.'))
       .map(l => QName(l.toList))
 
-  def arrow: P[(QName,QName,QName)=>RxGraph] =
-    string("-->").as(RxGraph().addEdge) |
-    string("->>").as(RxGraph().addOn) |
-    string("--!").as(RxGraph().addOff) |
-    string("--x").as(RxGraph().addOff) |
-    string("--#--").as((a:QName,b:QName,c:QName) => RxGraph()
-      .addOff(a,b,c).addOff(b,a,c)) |
-    string("---->").as((a:QName,b:QName,c:QName) => RxGraph()
-      .addOn(a,b,c).addOff(b,b,c))
+  def arrow: P[(Option[String],QName,QName,QName)=>XFRTS] =
+    string("-->").as(XFRTS().addEdge) |
+    string("->>").as(XFRTS().addOn) |
+    string("--!").as(XFRTS().addOff) |
+    string("--x").as(XFRTS().addOff) |
+    string("--#--").as((al:Option[String],a:QName,b:QName,c:QName) => XFRTS()
+      .addOff(al,a,b,c).addOff(al,b,a,c)) |
+    string("---->").as((al:Option[String],a:QName,b:QName,c:QName) => XFRTS()
+      .addOn(al,a,b,c).addOff(al,b,b,c))
 
 //  private def on:  P[Boolean] = P.string("ON").map( x => true)
 //  private def off: P[Boolean] = P.string("OFF").map( x => false)

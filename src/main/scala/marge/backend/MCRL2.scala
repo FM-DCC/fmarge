@@ -101,6 +101,6 @@ object MCRL2:
         +s"deact_${mkMAction(trg._1)}" ))
     acts
 
-  val testRX: RxGraph = Parser.parseProgram("init pay\npay --> select : insert_coin\nselect --> soda : ask_soda\nselect --> beer : ask_beer\nsoda --> pay : get_soda\nbeer --> pay : get_beer\n\nask_soda --! ask_soda : noSoda disabled\nask_beer --! ask_beer : noBeer\nask_soda ->> noSoda")
+//  val testRX: RxGraph = Parser.parseProgram("init pay\npay --> select : insert_coin\nselect --> soda : ask_soda\nselect --> beer : ask_beer\nsoda --> pay : get_soda\nbeer --> pay : get_beer\n\nask_soda --! ask_soda : noSoda disabled\nask_beer --! ask_beer : noBeer\nask_soda ->> noSoda")
 
 
