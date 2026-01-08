@@ -29627,6 +29627,15 @@ function $ct_jl_RuntimeException__T__($thiz, s) {
 }
 class $c_jl_RuntimeException extends $c_jl_Exception {
 }
+function $as_jl_RuntimeException(obj) {
+  return (((obj instanceof $c_jl_RuntimeException) || (obj === null)) ? obj : $throwClassCastException(obj, "java.lang.RuntimeException"))
+}
+function $isArrayOf_jl_RuntimeException(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.jl_RuntimeException)))
+}
+function $asArrayOf_jl_RuntimeException(obj, depth) {
+  return (($isArrayOf_jl_RuntimeException(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Ljava.lang.RuntimeException;", depth))
+}
 var $d_jl_RuntimeException = new $TypeData().initClass({
   jl_RuntimeException: 0
 }, false, "java.lang.RuntimeException", {
@@ -32025,16 +32034,16 @@ $c_Lmarge_syntax_XFRTS.prototype.toFRTS__Lmarge_syntax_FRTS = (function() {
     throw new $c_s_MatchError(x$1$5)
   }))));
   $n(this.Lmarge_syntax_XFRTS__f_f);
-  var on$4 = $m_Lmarge_backend_Rel$().join__sci_Map__sci_Set__sci_Map($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_on, on2);
-  var off$4 = $m_Lmarge_backend_Rel$().join__sci_Map__sci_Set__sci_Map($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_off, off2);
+  var on$1 = $m_Lmarge_backend_Rel$().join__sci_Map__sci_Set__sci_Map($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_on, on2);
+  var off$1 = $m_Lmarge_backend_Rel$().join__sci_Map__sci_Set__sci_Map($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_off, off2);
   var this$8 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var edgs$4 = this$8.Lmarge_syntax_RTS__f_edgs;
+  var edgs$1 = this$8.Lmarge_syntax_RTS__f_edgs;
   var this$9 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var inits$4 = this$9.Lmarge_syntax_RTS__f_inits;
+  var inits$1 = this$9.Lmarge_syntax_RTS__f_inits;
   var this$10 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var act$4 = this$10.Lmarge_syntax_RTS__f_act;
+  var act$1 = this$10.Lmarge_syntax_RTS__f_act;
   $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var rts = new $c_Lmarge_syntax_RTS(edgs$4, on$4, off$4, inits$4, act$4);
+  var rts = new $c_Lmarge_syntax_RTS(edgs$1, on$1, off$1, inits$1, act$1);
   var this$12 = $n(this.Lmarge_syntax_XFRTS__f_f);
   var fm = this$12.Lmarge_syntax_FRTS__f_fm;
   var this$13 = $n(this.Lmarge_syntax_XFRTS__f_f);
@@ -32062,18 +32071,18 @@ $c_Lmarge_syntax_XFRTS.prototype.addEdge__s_Option__Lmarge_syntax_RTS$QName__Lma
   var elems$2 = $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([new $c_T2(s2, l)]));
   var y$1 = this$10.from__sc_IterableOnce__sci_Set(elems$2);
   var elems$3 = $n($$x2).wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([new $c_T2(s1, y$1)]));
-  var edgs$3 = this$12.from__sc_IterableOnce__sci_Map(elems$3);
+  var edgs$2 = this$12.from__sc_IterableOnce__sci_Map(elems$3);
   var this$14 = $n($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_act);
   var elem = new $c_T3(s1, s2, l);
-  var act$3 = $as_sci_Set(this$14.incl__O__sci_SetOps(elem));
+  var act$2 = $as_sci_Set(this$14.incl__O__sci_SetOps(elem));
   var this$15 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var on$3 = this$15.Lmarge_syntax_RTS__f_on;
+  var on$2 = this$15.Lmarge_syntax_RTS__f_on;
   var this$16 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var off$3 = this$16.Lmarge_syntax_RTS__f_off;
+  var off$2 = this$16.Lmarge_syntax_RTS__f_off;
   var this$17 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var inits$3 = this$17.Lmarge_syntax_RTS__f_inits;
+  var inits$2 = this$17.Lmarge_syntax_RTS__f_inits;
   $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var rts$1 = new $c_Lmarge_syntax_RTS(edgs$3, on$3, off$3, inits$3, act$3);
+  var rts$1 = new $c_Lmarge_syntax_RTS(edgs$2, on$2, off$2, inits$2, act$2);
   if ($n(fe).isEmpty__Z()) {
     var pk$1 = $n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_pk
   } else {
@@ -32095,10 +32104,14 @@ $c_Lmarge_syntax_XFRTS.prototype.addEdge__s_Option__Lmarge_syntax_RTS$QName__Lma
   return this.$plus$plus__Lmarge_syntax_XFRTS__Lmarge_syntax_XFRTS(updF)
 });
 $c_Lmarge_syntax_XFRTS.prototype.addOn__s_Option__Lmarge_syntax_RTS$QName__Lmarge_syntax_RTS$QName__Lmarge_syntax_RTS$QName__s_Option__Lmarge_syntax_XFRTS = (function(nm, s1, s2, l, fe) {
+  var this$1 = $n(fe);
+  if ((!this$1.isEmpty__Z())) {
+    $m_s_sys_package$().error__T__E("Cannot annotate activations with feature expressions.")
+  };
   $p_Lmarge_syntax_XFRTS__noLbs__T__s_Option__Lmarge_syntax_RTS$QName__V(this, "activating", nm, l);
   var r = this.Lmarge_syntax_XFRTS__f_xon;
-  var this$5 = $n($as_sci_SetOps($n(r).apply__O__O(s1)));
-  var y = this$5.incl__O__sci_SetOps(s2);
+  var this$6 = $n($as_sci_SetOps($n(r).apply__O__O(s1)));
+  var y = this$6.incl__O__sci_SetOps(s2);
   var xon$2 = $as_sci_Map($n(r).$plus__T2__sci_MapOps(new $c_T2(s1, y)));
   var f$2 = this.Lmarge_syntax_XFRTS__f_f;
   var xoff$2 = this.Lmarge_syntax_XFRTS__f_xoff;
@@ -32106,10 +32119,14 @@ $c_Lmarge_syntax_XFRTS.prototype.addOn__s_Option__Lmarge_syntax_RTS$QName__Lmarg
   return new $c_Lmarge_syntax_XFRTS(f$2, xon$2, xoff$2, names$1)
 });
 $c_Lmarge_syntax_XFRTS.prototype.addOff__s_Option__Lmarge_syntax_RTS$QName__Lmarge_syntax_RTS$QName__Lmarge_syntax_RTS$QName__s_Option__Lmarge_syntax_XFRTS = (function(nm, s1, s2, l, fe) {
+  var this$1 = $n(fe);
+  if ((!this$1.isEmpty__Z())) {
+    $m_s_sys_package$().error__T__E("Cannot annotate activations with feature expressions.")
+  };
   $p_Lmarge_syntax_XFRTS__noLbs__T__s_Option__Lmarge_syntax_RTS$QName__V(this, "deactivating", nm, l);
   var r = this.Lmarge_syntax_XFRTS__f_xoff;
-  var this$5 = $n($as_sci_SetOps($n(r).apply__O__O(s1)));
-  var y = this$5.incl__O__sci_SetOps(s2);
+  var this$6 = $n($as_sci_SetOps($n(r).apply__O__O(s1)));
+  var y = this$6.incl__O__sci_SetOps(s2);
   var xoff$3 = $as_sci_Map($n(r).$plus__T2__sci_MapOps(new $c_T2(s1, y)));
   var f$3 = this.Lmarge_syntax_XFRTS__f_f;
   var xon$3 = this.Lmarge_syntax_XFRTS__f_xon;
@@ -32122,17 +32139,17 @@ $c_Lmarge_syntax_XFRTS.prototype.deactivate__T3__Lmarge_syntax_XFRTS = (function
   };
   $n(this.Lmarge_syntax_XFRTS__f_f);
   var this$1 = $n($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_act);
-  var act$2 = $as_sci_Set(this$1.excl__O__sci_SetOps(edge));
+  var act$3 = $as_sci_Set(this$1.excl__O__sci_SetOps(edge));
   var this$2 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var edgs$2 = this$2.Lmarge_syntax_RTS__f_edgs;
+  var edgs$3 = this$2.Lmarge_syntax_RTS__f_edgs;
   var this$3 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var on$2 = this$3.Lmarge_syntax_RTS__f_on;
+  var on$3 = this$3.Lmarge_syntax_RTS__f_on;
   var this$4 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var off$2 = this$4.Lmarge_syntax_RTS__f_off;
+  var off$3 = this$4.Lmarge_syntax_RTS__f_off;
   var this$5 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var inits$2 = this$5.Lmarge_syntax_RTS__f_inits;
+  var inits$3 = this$5.Lmarge_syntax_RTS__f_inits;
   $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var rts = new $c_Lmarge_syntax_RTS(edgs$2, on$2, off$2, inits$2, act$2);
+  var rts = new $c_Lmarge_syntax_RTS(edgs$3, on$3, off$3, inits$3, act$3);
   var this$7 = $n(this.Lmarge_syntax_XFRTS__f_f);
   var fm = this$7.Lmarge_syntax_FRTS__f_fm;
   var this$8 = $n(this.Lmarge_syntax_XFRTS__f_f);
@@ -32145,17 +32162,17 @@ $c_Lmarge_syntax_XFRTS.prototype.deactivate__T3__Lmarge_syntax_XFRTS = (function
 });
 $c_Lmarge_syntax_XFRTS.prototype.addInit__Lmarge_syntax_RTS$QName__Lmarge_syntax_XFRTS = (function(s) {
   $n(this.Lmarge_syntax_XFRTS__f_f);
-  var inits$1 = $n($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_inits).add__O__Lcaos_common_Multiset(s);
+  var inits$4 = $n($n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts).Lmarge_syntax_RTS__f_inits).add__O__Lcaos_common_Multiset(s);
   var this$1 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var edgs$1 = this$1.Lmarge_syntax_RTS__f_edgs;
+  var edgs$4 = this$1.Lmarge_syntax_RTS__f_edgs;
   var this$2 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var on$1 = this$2.Lmarge_syntax_RTS__f_on;
+  var on$4 = this$2.Lmarge_syntax_RTS__f_on;
   var this$3 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var off$1 = this$3.Lmarge_syntax_RTS__f_off;
+  var off$4 = this$3.Lmarge_syntax_RTS__f_off;
   var this$4 = $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var act$1 = this$4.Lmarge_syntax_RTS__f_act;
+  var act$4 = this$4.Lmarge_syntax_RTS__f_act;
   $n($n(this.Lmarge_syntax_XFRTS__f_f).Lmarge_syntax_FRTS__f_rts);
-  var rts = new $c_Lmarge_syntax_RTS(edgs$1, on$1, off$1, inits$1, act$1);
+  var rts = new $c_Lmarge_syntax_RTS(edgs$4, on$4, off$4, inits$4, act$4);
   var this$6 = $n(this.Lmarge_syntax_XFRTS__f_f);
   var fm = this$6.Lmarge_syntax_FRTS__f_fm;
   var this$7 = $n(this.Lmarge_syntax_XFRTS__f_f);
@@ -33716,7 +33733,7 @@ function $h_Lcaos_frontend_widgets_Widget$$anon$1() {
 }
 $h_Lcaos_frontend_widgets_Widget$$anon$1.prototype = $c_Lcaos_frontend_widgets_Widget$$anon$1.prototype;
 $c_Lcaos_frontend_widgets_Widget$$anon$1.prototype.isDefinedAt__jl_Throwable__Z = (function(x) {
-  return ((x instanceof $c_sjs_js_JavaScriptException) ? ($as_sjs_js_JavaScriptException(x), true) : ((x instanceof $c_jl_AssertionError) ? ($as_jl_AssertionError(x), true) : (x !== null)))
+  return ((x instanceof $c_sjs_js_JavaScriptException) ? ($as_sjs_js_JavaScriptException(x), true) : ((x instanceof $c_jl_AssertionError) ? ($as_jl_AssertionError(x), true) : ((x instanceof $c_jl_RuntimeException) ? ($as_jl_RuntimeException(x), true) : (x !== null))))
 });
 $c_Lcaos_frontend_widgets_Widget$$anon$1.prototype.applyOrElse__jl_Throwable__F1__O = (function(x, default$1) {
   if ((x instanceof $c_sjs_js_JavaScriptException)) {
@@ -33733,13 +33750,19 @@ $c_Lcaos_frontend_widgets_Widget$$anon$1.prototype.applyOrElse__jl_Throwable__F1
     var msg$1 = $n(e$2).jl_Throwable__f_s;
     $p_Lcaos_frontend_widgets_OutputArea__addBox__T__T__V(this$3, msg$1, "danger");
     return (void 0)
+  } else if ((x instanceof $c_jl_RuntimeException)) {
+    var e$3 = $as_jl_RuntimeException(x);
+    var this$4 = $n(this.Lcaos_frontend_widgets_Widget$$anon$1__f_errorBox$1);
+    var msg$2 = ((("Error raised" + this.Lcaos_frontend_widgets_Widget$$anon$1__f_by$1) + ": ") + $n(e$3).getMessage__T());
+    $p_Lcaos_frontend_widgets_OutputArea__addBox__T__T__V(this$4, msg$2, "danger");
+    return (void 0)
   } else if ((x !== null)) {
-    var this$6 = $n(this.Lcaos_frontend_widgets_Widget$$anon$1__f_errorBox$1);
+    var this$7 = $n(this.Lcaos_frontend_widgets_Widget$$anon$1__f_errorBox$1);
     var $$x2 = this.Lcaos_frontend_widgets_Widget$$anon$1__f_by$1;
-    var this$4 = $n(x);
-    var this$5 = $n($m_s_Predef$().wrapRefArray__AO__scm_ArraySeq$ofRef($n(x).getStackTrace__Ajl_StackTraceElement()));
-    var msg$2 = ((((((("Error" + $$x2) + ": ") + x) + " - ") + $objectGetClass(this$4)) + "\n ### ") + $f_sc_IterableOnceOps__mkString__T__T__T__T(this$5, "", "\n - ", ""));
-    $p_Lcaos_frontend_widgets_OutputArea__addBox__T__T__V(this$6, msg$2, "danger");
+    var this$5 = $n(x);
+    var this$6 = $n($m_s_Predef$().wrapRefArray__AO__scm_ArraySeq$ofRef($n(x).getStackTrace__Ajl_StackTraceElement()));
+    var msg$3 = ((((((("Error" + $$x2) + ": ") + x) + " - ") + $objectGetClass(this$5)) + "\n ### ") + $f_sc_IterableOnceOps__mkString__T__T__T__T(this$6, "", "\n - ", ""));
+    $p_Lcaos_frontend_widgets_OutputArea__addBox__T__T__V(this$7, msg$3, "danger");
     return (void 0)
   } else {
     return $n(default$1).apply__O__O(x)

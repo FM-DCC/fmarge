@@ -53,9 +53,11 @@ case class XFRTS(f:FRTS,
       names = newNames)
     this ++ updF
   def addOn(nm: Option[String],s1:State,s2:State,l:Action, fe:Option[FExp]) =
+    if fe.isDefined then sys.error("Cannot annotate activations with feature expressions.")
     noLbs("activating",nm,l)
     this.copy(xon = add(s1->s2,xon))
   def addOff(nm: Option[String],s1:State,s2:State,l:Action, fe:Option[FExp]) =
+    if fe.isDefined then sys.error("Cannot annotate activations with feature expressions.")
     noLbs("deactivating",nm,l)
     this.copy(xoff = add(s1->s2,xoff))
   //    def addOff(es:(Edge,Edge)) =
