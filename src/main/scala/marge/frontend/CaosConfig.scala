@@ -6,6 +6,7 @@ import caos.sos.SOS
 import caos.view.*
 import marge.backend.*
 import marge.syntax.FExp.{FNot, Feat}
+import marge.syntax.RTS.QName
 import marge.syntax.{FRTS, Parser, Show, Syntax}
 //import marge.syntax.Syntax.RxGraph
 import marge.syntax.RTS
@@ -81,8 +82,29 @@ object CaosConfig extends Configurator[FRTS]:
      "Step-by-step (txt)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, Show.apply, _.show, Text),
 ////     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
      "All steps" -> lts((e:FRTS)=>e.getRTS, RTSSemantics, x => x.inits.toString, _.toString),
-     "All steps (DFA)" -> lts((e:FRTS)=>Set(e.getRTS), caos.sos.ToDFA(RTSSemantics), x => x.map(_.inits.toString).mkString(","), _.toString),
-////     "All steps (Min DFA)" -> lts((e:RxGraph)=>Set(e), caos.sos.ToDFA.minLTS(RxSemantics), x => x.map(_.inits.mkString(",")).mkString("-"), _.toString),
+     "All steps (DFA)" -> lts((e:FRTS)=>Set(e.getRTS), caos.sos.FinAut.detSOS(RTSSemantics), x => x.map(_.inits.toString).mkString(","), _.toString),
+//     "All steps (min-DFA)" -> {
+//       var s0: Option[RTS] = None
+//       lts((e:FRTS)=>{s0 = Some(e.getRTS); Set(Set(s0.get))},
+//           {lazy val sos2 = caos.sos.FinAut.minSOS(RTSSemantics,s0.get)._1; sos2},
+//           x => x.map(_.inits.toString).mkString(","),
+//           _.toString)
+//     },
+     "All steps (min2-DFA)" -> lts2[FRTS,QName,Set[Set[RTS]]](
+       (e:FRTS)=>
+         val (sss,init,done) = caos.sos.FinAut.minSOS(RTSSemantics,e.getRTS)
+         init,
+       s =>
+         val (sss,init,done) = caos.sos.FinAut.minSOS(RTSSemantics,s.getRTS)
+         //println(s"Initial states: ${init.flatten.map(_.map(_.inits).mkString(",")).mkString("\n")}")
+         sss,
+       x => x.map(_.map(_.inits).mkString(";")).mkString(","),
+       _.toString),
+//     "All steps (min-DFA)" -> lts2[FRTS,QName,Set[Set[RTS]]]((e:FRTS)=>Set(Set(e.getRTS)),
+//         s => caos.sos.FinAut.minSOS(RTSSemantics,s.getRTS)._1,
+//         x => x.map(_.map(_.inits).mkString(";")).mkString(","),
+//         _.toString)
+//     ,     ////     "All steps (Min DFA)" -> lts((e:RxGraph)=>Set(e), caos.sos.ToDFA.minLTS(RxSemantics), x => x.map(_.inits.mkString(",")).mkString("-"), _.toString),
      "Possible problems" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
         case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
         case m => m.mkString("\n")
@@ -91,7 +113,7 @@ object CaosConfig extends Configurator[FRTS]:
       -> view((frts:FRTS) => {
           val rts = frts.getRTS
           val (st,eds,done) = SOS.traverse(RTSSemantics,rts,2000)
-          val (stD, edsD, doneD) = SOS.traverse(caos.sos.ToDFA(RTSSemantics), Set(rts), 2000)
+          val (stD, edsD, doneD) = SOS.traverse(caos.sos.FinAut.detSOS(RTSSemantics), Set(rts), 2000)
           val rstates = rts.states.size
           val simpleEdges = (for (_,dests) <- rts.edgs yield dests.size).sum
           val reactions = (for (_,dests) <- rts.on yield dests.size).sum +

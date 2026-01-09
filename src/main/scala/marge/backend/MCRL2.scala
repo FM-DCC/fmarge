@@ -1,7 +1,8 @@
 package marge.backend
 
 import marge.syntax.Parser
-import marge.syntax.Syntax.{QName, RxGraph}
+import marge.syntax.Syntax.RxGraph
+import marge.syntax.RTS.QName
 
 object MCRL2:
   def apply(rx: RxGraph): String =

@@ -2,6 +2,7 @@ package marge.syntax
 
 import marge.backend.RxSemantics
 import marge.syntax.Syntax.EdgeMap
+import RTS.QName
 
 import scala.annotation.tailrec
 
@@ -15,24 +16,24 @@ object Syntax:
 //    case Some((a,bs)) if bs.isEmpty => headOption(r-a)
 //    case Some((a,bs)) => (a,bs)
 
-  case class QName(n:List[String]):
-    override def toString = n.mkString("/")
-    def show = if n.isEmpty then "-" else toString
-    def /(other:QName) = if other.n.isEmpty then other else QName(n:::other.n)
-    def /(other:String) = QName(n:::List(other))
-    def /(e:EdgeMap):EdgeMap =
-      e.map(kv=>(this/(kv._1) -> kv._2.map((x,y)=>(this/x,this/y))))
-    def /-(lbls:Map[QName,Edges]): Map[QName,Edges] =
-      lbls.map(kv=>(this/(kv._1) -> this/kv._2))
-    def /(es:Edges): Edges =
-      es.map((x,y,z)=>(this/x,this/y,this/z))
-    def /-(ns:Set[QName]): Set[QName] =
-      ns.map(n => this/n)
-//    def /-(ns:List[QName]): List[QName] =
+//  case class QName(n:List[String]):
+//    override def toString = n.mkString("/")
+//    def show = if n.isEmpty then "-" else toString
+//    def /(other:QName) = if other.n.isEmpty then other else QName(n:::other.n)
+//    def /(other:String) = QName(n:::List(other))
+//    def /(e:EdgeMap):EdgeMap =
+//      e.map(kv=>(this/(kv._1) -> kv._2.map((x,y)=>(this/x,this/y))))
+//    def /-(lbls:Map[QName,Edges]): Map[QName,Edges] =
+//      lbls.map(kv=>(this/(kv._1) -> this/kv._2))
+//    def /(es:Edges): Edges =
+//      es.map((x,y,z)=>(this/x,this/y,this/z))
+//    def /-(ns:Set[QName]): Set[QName] =
 //      ns.map(n => this/n)
-    def /(rx: RxGraph): RxGraph =
-        RxGraph(this/rx.edg, this/rx.on, this/rx.off, this/-rx.lbls,
-          this/-rx.inits, this/rx.act)
+////    def /-(ns:List[QName]): List[QName] =
+////      ns.map(n => this/n)
+//    def /(rx: RxGraph): RxGraph =
+//        RxGraph(this/rx.edg, this/rx.on, this/rx.off, this/-rx.lbls,
+//          this/-rx.inits, this/rx.act)
 
 
   type Edge = (QName,QName,QName) //from,to,by
