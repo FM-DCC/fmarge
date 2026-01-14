@@ -82,6 +82,25 @@ object CaosConfig extends Configurator[FRTS]:
      "Step-by-step (txt)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, Show.apply, _.show, Text),
 ////     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
      "All steps" -> lts((e:FRTS)=>e.getRTS, RTSSemantics, x => x.inits.toString, _.toString),
+     "All steps (txt)" ->
+       view((e:FRTS)=>
+           var seed = 0;
+           var rtsid = Map[RTS,Int]()
+           def fresh(rts:RTS): String = rtsid.get(rts) match
+             case Some(value) => s"s$value"
+             case None =>
+               rtsid += rts -> seed
+               seed += 1
+               s"s${seed-1}"
+           val rts = e.getRTS
+           val init = fresh(rts)
+           val (nfa,done) = caos.sos.FinAut.sosToNFA(RTSSemantics,Set(rts))
+           val procs = for (src,edgs) <- nfa.e.groupBy(_._1) yield
+             s"  ${fresh(src)} = ${edgs.map(e => s"${e._2} . ${fresh(e._3)}").mkString(" + ")};"
+           s"init $init;\n"+
+             s"act\n  ${e.getRTS.act.map(_._3).mkString(",")};\n" +
+             s"proc\n${procs.toSet.mkString("\n")}"
+         ,Text),
      "All steps (DFA)" -> lts((e:FRTS)=>Set(e.getRTS), caos.sos.FinAut.detSOS(RTSSemantics), x => x.map(_.inits.toString).mkString(","), _.toString),
 //     "All steps (min-DFA)" -> {
 //       var s0: Option[RTS] = None
@@ -108,7 +127,7 @@ object CaosConfig extends Configurator[FRTS]:
      "Possible problems" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
         case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
         case m => m.mkString("\n")
-       , Text).expand,
+       , Text), //.expand,
      "Number of states and edges"
       -> view((frts:FRTS) => {
           val rts = frts.getRTS
