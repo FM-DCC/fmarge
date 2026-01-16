@@ -70,7 +70,7 @@ object Parser :
       .map(res => res.toList.fold(XFRTS())(_ ++ _))
   )
   def statement(rx:P[XFRTS]): P[XFRTS] =
-    init | aut(rx) | fm | edge
+    init | aut(rx) | fm | select | edge
 
   def init: P[XFRTS] =
     (string("init") *> sps *> qname) // <* (sps<*char(';')))
@@ -82,6 +82,9 @@ object Parser :
   def fm: P[XFRTS] =
     (string("fm") *> sps *> fexp) // (fexp <* sps <* char(';')))
       .map(XFRTS().addFM(_))
+  def select: P[XFRTS] =
+    (string("select") *> sps *> ((qname <* sps).repSep0(char(',')*>sps) <* char(';')))
+      .map(names => XFRTS().addSel(names.map(_.toString).toSet))
 
   def edge: P[XFRTS] =
     ( (alias <* sps).?.with1 ~ // optional alias

@@ -71,6 +71,8 @@ case class XFRTS(f:FRTS,
     this.copy(f = f.copy(rts = f.rts.copy(inits = f.rts.inits +s))) // s::inits
   def addFM(newfm:FExp) =
     this.copy(f = f.addFM(newfm))
+  def addSel(selected:Set[String]) =
+    this.copy(f = f.addSel(selected))
   def ++(frts:FRTS): XFRTS =
       this.copy(f = f ++ frts)
   def ++(r:RTS): XFRTS =
@@ -92,9 +94,10 @@ object XFRTS:
   /** Initialises a XFRTS with default values */
   def apply(): XFRTS =
     val rts = RTS(
-      Map().withDefaultValue(Set()),Map().withDefaultValue(Set()),
-      Map().withDefaultValue(Set()),Multiset(),Set())
-    val frts = FRTS(rts,FExp.FTrue,Map())
+      Map(),Map(),
+      Map() //.withDefaultValue(Set())
+      ,Multiset(),Set())
+    val frts = FRTS(rts,FExp.FTrue,Map(),Set())
     XFRTS(frts, backend.Rel.empty, Rel.empty, Map())
 
 

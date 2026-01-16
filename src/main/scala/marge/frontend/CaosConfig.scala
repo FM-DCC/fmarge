@@ -14,17 +14,17 @@ import marge.backend.RxSemantics
 
 /** Object used to configure which analysis appear in the browser */
 object CaosConfig extends Configurator[FRTS]:
-  val name = "Animator of Labelled Reactive Graphs"
+  val name = "Frets: Animator of Featured Reactive Transition Systems"
   override val languageName: String = "Input Reactive Graphs"
 
   val parser: String => FRTS = marge.syntax.Parser.parseProgram
 
   /** Examples of programs that the user can choose from. The first is the default one. */
   val examples: Seq[Example] = List(
-    "Simple" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a"
-      -> "Basic example",
     "FM experiment" -> "init s0\ns0 --> s1: a if sec\ns1 --> s0: b if !sec\na  --! a\n\nfm fa -> fb && (!fa || fb)"
       -> "Experimenting with FM solutions",
+    "Simple" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a"
+      -> "Basic example",
 //    "Counter" -> "init s0\ns0 --> s0 : act\nact --! act : offAct disabled\nact ->> offAct : on1 disabled\nact ->> on1"
 //      -> "turns off a transition after 3 times.",
 //    "Penguim" -> "init Son_of_Tweetie\nSon_of_Tweetie --> Special_Penguin\nSpecial_Penguin --> Penguin : Penguim\nPenguin --> Bird : Bird\nBird --> Does_Fly: Fly\n\nBird --! Fly : noFly\nPenguim --! noFly"
@@ -49,7 +49,9 @@ object CaosConfig extends Configurator[FRTS]:
     "Parallel" -> "aut a {\n  init 0\n  0 --> 1 : a disabled\n}\naut b {\n  init 0\n  0 --> 1 : b0\n  1 --> 0 : b disabled\n}\naut c {\n  init 0\n  0 --> 1 : c0\n  1 --> 0 : c disabled\n}\n// intrusion\nb.b  ->> a.a\nc.c  ->> a.a\nb.b0 ->> c.c\nc.c0 ->> b.b\nb.b0 --#-- c.c0"
       -> "Experiments with multiple components.",
     "Vending" -> "init s1\ns1 --> s1: sodaRefill\ns1 --> s1: teaRefill\ns1 --> s2: pay\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda\ns3 --> s6: tea\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\n\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea"
-      -> "Experiment from the ongoing paper"
+      -> "Experiment from the ongoing paper",
+    "F-Vending" -> "init s1\ns1 --> s1: sodaRefill if S\ns1 --> s1: teaRefill if T\ns1 --> s2: pay if P\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda if S\ns3 --> s6: tea  if T\ns1 --> s5: soda if !P\ns1 --> s6: tea  if !P\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\n\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea\n\nfm S || T\n\nselect S,T,P;"
+      -> "Experiment from the ongoing paper",
   )
 
 //   val a = Feat("a")
@@ -63,7 +65,8 @@ object CaosConfig extends Configurator[FRTS]:
    /** Description of the widgets that appear in the dashboard. */
    val widgets = List(
 //     "View State (DB)" -> view[FRTS](_.toString, Text).expand,
-     "View State" -> view[FRTS](Show.apply, Text),
+     "View FRTS" -> view[FRTS](Show.apply, Text),
+     "View RTS" -> view[FRTS](x => Show(x.getRTS), Text),
      "Solve FM" -> view[FRTS](x =>
                   "== FM to DNF ==\n" +
                   Show.showDNF(x.fm.dnf) +

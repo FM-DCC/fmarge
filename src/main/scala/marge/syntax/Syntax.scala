@@ -3,15 +3,16 @@ package marge.syntax
 import marge.backend.RxSemantics
 import marge.syntax.Syntax.EdgeMap
 import RTS.QName
+import marge.backend.Rel.*
 
 import scala.annotation.tailrec
 
 object Syntax:
 
-  type Rel[A,B] = Map[A,Set[B]]
-  def empty[A,B] = Map[A,Set[B]]().withDefaultValue(Set())
-  def add[A,B](ab:(A,B), r:Rel[A,B]) = r + (ab._1 -> (r(ab._1)+(ab._2)))
-  def join[A,B](r1:Rel[A,B], r2:Rel[A,B]) = r1 ++ (r2.map(ab => ab._1 -> (r1(ab._1)++(ab._2))))
+//  type Rel[A,B] = Map[A,Set[B]]
+//  def empty[A,B] = Map[A,Set[B]]().withDefaultValue(Set())
+//  def add[A,B](ab:(A,B), r:Rel[A,B]) = r + (ab._1 -> (r(ab._1)+(ab._2)))
+//  def join[A,B](r1:Rel[A,B], r2:Rel[A,B]) = r1 ++ (r2.map(ab => ab._1 -> (r1(ab._1)++(ab._2))))
 //  def headOption[A,B](r:Rel[A,B]) = r.headOption match
 //    case Some((a,bs)) if bs.isEmpty => headOption(r-a)
 //    case Some((a,bs)) => (a,bs)

@@ -15,8 +15,8 @@ object RTSSemantics extends SOS[Action,RTS]:
         _ <- 1 to i
         (st2, lbl) <- rx.edgs(st) if rx.act((st, st2, lbl))
     yield
-      val toAct = rx.on((st,st2,lbl))
-      val toDeact = rx.off((st, st2, lbl))
+      val toAct = Rel.get((st,st2,lbl),rx.on)
+      val toDeact = Rel.get((st,st2,lbl),rx.off)
       val newAct = (rx.act ++ toAct) -- toDeact // biased to deactivation
       val newInits = (rx.inits - st) + st2
       lbl -> rx.copy(inits = newInits, act = newAct)
@@ -27,8 +27,8 @@ object RTSSemantics extends SOS[Action,RTS]:
         _ <- 1 to i
         (st2, lbl) <- rx.edgs(st) if rx.act((st, st2, lbl))
     yield
-      val toAct = rx.on((st, st2, lbl))
-      val toDeact = rx.off((st, st2, lbl))
+      val toAct = Rel.get((st, st2, lbl),rx.on)
+      val toDeact = Rel.get((st, st2, lbl),rx.off)
       val newAct = (rx.act ++ toAct) -- toDeact // biased to deactivation
       val newInits = (rx.inits - st) + st2
       (st, st2, lbl) -> rx.copy(inits = newInits, act = newAct)

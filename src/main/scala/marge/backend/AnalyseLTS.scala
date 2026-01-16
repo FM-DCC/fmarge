@@ -43,8 +43,8 @@ object AnalyseLTS:
 //          var moreEdges: Edges = Set()
           for e<-newEdges do
 //            val (toAct,toDeact) = FRTSSemantics.toOnOff(e, st)
-            val toAct   = st.on(e)
-            val toDeact = st.off(e)
+            val toAct   = Rel.get(e,st.on)
+            val toDeact = Rel.get(e,st.off)
 //            val fromE = FRTSSemantics.from(e,st)
 //            moreEdges ++= fromE
             val shared = toAct.intersect(toDeact)

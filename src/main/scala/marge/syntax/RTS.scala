@@ -39,7 +39,7 @@ case class RTS(edgs: EdgeMap,
     for (e1, upd) <- (on.toSet ++ off.toSet); e2 <- upd; s <- Set(e1, e2) yield s
 
   def ++(rts:RTS): RTS =
-    RTS(join(rts.edgs.withDefaultValue(Set()), edgs),
+    RTS(join(rts.edgs, edgs),
       join(rts.on, on),
       join(rts.off, off),
       rts.inits ++ inits,
@@ -75,7 +75,7 @@ object RTS:
 //    def /-(ns:List[QName]): List[QName] =
 //      ns.map(n => this/n)
     def /(rx: FRTS): FRTS =
-      FRTS(this/rx.rts, rx.fm, rx.pk)
+      rx.copy(rts = this/rx.rts)
     def /(rx: XFRTS): XFRTS =
       XFRTS(this / rx.f,
         rx.xon.map( kv => this/kv._1 -> kv._2.map(this / _)),

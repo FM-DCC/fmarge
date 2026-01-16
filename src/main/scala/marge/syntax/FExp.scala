@@ -24,7 +24,7 @@ enum FExp:
 
   /**
     * Checks if a given instantiation of features satisfies the feature expression
-    * @param sol instantiation of features
+    * @param sol instantiation of features to their values (assumed false if unknown)
     * @return
     */
   def check(sol:Map[String,Boolean]): Boolean = this match
