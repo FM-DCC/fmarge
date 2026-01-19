@@ -6,8 +6,8 @@ import caos.sos.{FinAut, SOS}
 import caos.view.*
 import marge.backend.*
 import marge.syntax.FExp.{FNot, Feat}
-import marge.syntax.RTS.QName
-import marge.syntax.{FRTS, Parser, Show, Syntax}
+import marge.syntax.RTS.{Action, Edge, QName}
+import marge.syntax.{FExp, FRTS, Parser, Show, Syntax}
 //import marge.syntax.Syntax.RxGraph
 import marge.syntax.RTS
 import marge.backend.RxSemantics
@@ -92,7 +92,61 @@ object CaosConfig extends Configurator[FRTS]:
 //     "Step-by-step DB (simpler)" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaidPlain, _.show, Text).expand,
      "RTS: Step-by-step (txt)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, Show.apply, _.show, Text),
 ////     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
-     "TS: flattened" -> lts((e:FRTS)=>e.getRTS, RTSSemantics, x => x.inits.toString, _.toString),
+     "TS: flattened" -> lts((e:FRTS)=>e.getRTS,
+       RTSSemantics,
+       x => x.inits.toString,
+       _.toString),
+     "FTS: flattened" -> lts2((e:FRTS)=>
+       (Set(e.getRTS), RTSSemantics.asFTS(e.pk)),
+       x => x.inits.toString,
+       (ae:(Action,FExp)) => if ae._2==FExp.FTrue
+        then ae._1.toString
+        else s"${ae._1} if ${Show(ae._2)}"),
+     "Possible problems" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
+       case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
+       case m => m.mkString("\n")
+       , Text), //.expand,
+     "Number of states and edges"
+       -> view((frts:FRTS) => {
+       val rts = frts.getRTS
+       val (st,eds,done) = SOS.traverse(RTSSemantics,rts,2000)
+       val (stD, edsD, doneD) = SOS.traverse(caos.sos.FinAut.detSOS(RTSSemantics), Set(rts), 2000)
+       val rstates = rts.states.size
+       val simpleEdges = (for (_,dests) <- rts.edgs yield dests.size).sum
+       val reactions = (for (_,dests) <- rts.on yield dests.size).sum +
+         (for (_,dests) <- rts.off yield dests.size).sum
+       val frstates = frts.rts.states.size
+       val fsimpleEdges = (for (_,dests) <- frts.rts.edgs yield dests.size).sum
+       val freactions = (for (_,dests) <- frts.rts.on yield dests.size).sum +
+         (for (_,dests) <- frts.rts.off yield dests.size).sum
+       s"== FRTS (size: ${
+         frstates + fsimpleEdges + freactions
+       }) ==\nstates: ${
+         frstates
+       }\nsimple edges: ${
+         fsimpleEdges
+       }\nhyper edges: ${
+         freactions
+       }\n== RTS (size: ${
+         rstates + simpleEdges + reactions
+       }) ==\nstates: ${
+         rstates
+       }\nsimple edges: ${
+         simpleEdges
+       }\nhyper edges: ${
+         reactions
+       }\n== Flattened TS (size: ${
+         if !done then ">2000" else st.size + eds
+       }) ==\n" +
+         (if !done then s"Stopped after traversing 2000 states"
+         else s"States: ${st.size}\nEdges: $eds") +
+         s"\n== Flattened TS as DFA (size: ${
+           if !done then ">2000" else stD.size + edsD
+         }) ==\n" +
+         (if !doneD then s"Stopped after traversing 2000 states"
+         else s"States: ${stD.size}\nEdges: $edsD")
+     },
+       Text),
      "TS: as mCRL2" ->
        view((e:FRTS)=>
            var seed = 0;
@@ -148,51 +202,7 @@ object CaosConfig extends Configurator[FRTS]:
 //         x => x.map(_.map(_.inits).mkString(";")).mkString(","),
 //         _.toString)
 //     ,     ////     "All steps (Min DFA)" -> lts((e:RxGraph)=>Set(e), caos.sos.ToDFA.minLTS(RxSemantics), x => x.map(_.inits.mkString(",")).mkString("-"), _.toString),
-     "Possible problems" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
-        case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
-        case m => m.mkString("\n")
-       , Text), //.expand,
-     "Number of states and edges"
-      -> view((frts:FRTS) => {
-          val rts = frts.getRTS
-          val (st,eds,done) = SOS.traverse(RTSSemantics,rts,2000)
-          val (stD, edsD, doneD) = SOS.traverse(caos.sos.FinAut.detSOS(RTSSemantics), Set(rts), 2000)
-          val rstates = rts.states.size
-          val simpleEdges = (for (_,dests) <- rts.edgs yield dests.size).sum
-          val reactions = (for (_,dests) <- rts.on yield dests.size).sum +
-                          (for (_,dests) <- rts.off yield dests.size).sum
-          val frstates = frts.rts.states.size
-          val fsimpleEdges = (for (_,dests) <- frts.rts.edgs yield dests.size).sum
-          val freactions = (for (_,dests) <- frts.rts.on yield dests.size).sum +
-                          (for (_,dests) <- frts.rts.off yield dests.size).sum
-          s"== FRTS (size: ${
-            frstates + fsimpleEdges + freactions
-          }) ==\nstates: ${
-            frstates
-          }\nsimple edges: ${
-            fsimpleEdges
-          }\nhyper edges: ${
-            freactions
-          }\n== RTS (size: ${
-            rstates + simpleEdges + reactions
-          }) ==\nstates: ${
-            rstates
-          }\nsimple edges: ${
-           simpleEdges
-          }\nhyper edges: ${
-            reactions
-          }\n== Flattened TS (size: ${
-            if !done then ">2000" else st.size + eds
-          }) ==\n" +
-          (if !done then s"Stopped after traversing 2000 states"
-           else s"States: ${st.size}\nEdges: $eds") +
-          s"\n== Flattened TS as DFA (size: ${
-           if !done then ">2000" else stD.size + edsD
-          }) ==\n" +
-            (if !doneD then s"Stopped after traversing 2000 states"
-            else s"States: ${stD.size}\nEdges: $edsD")
-        },
-        Text),
+
 //     "mCRL2 experiments"
 //     -> view(MCRL2.apply, Text),
 

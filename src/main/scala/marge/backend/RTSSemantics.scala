@@ -1,8 +1,9 @@
 package marge.backend
 
 import caos.sos.SOS
-import marge.syntax.RTS
-import marge.syntax.RTS.{Edges, QName, Edge, Action, State}
+import marge.syntax.FExp.FTrue
+import marge.syntax.{FExp, RTS}
+import marge.syntax.RTS.{Action, Edge, Edges, QName, State}
 
 import scala.annotation.tailrec
 
@@ -32,4 +33,13 @@ object RTSSemantics extends SOS[Action,RTS]:
       val newAct = (rx.act ++ toAct) -- toDeact // biased to deactivation
       val newInits = (rx.inits - st) + st2
       (st, st2, lbl) -> rx.copy(inits = newInits, act = newAct)
+
+  def asFTS(pk: Map[Edge,FExp]): SOS[(Action,FExp),RTS] =
+    new SOS[(Action,FExp),RTS]:
+      override def accepting(s: RTS): Boolean =
+        RTSSemantics.accepting(s)
+      override def next[A >: (Action,FExp)](s: RTS): Set[(A, RTS)] = {
+        nextEdge(s).map((edg,rts) => ((edg._3,pk.getOrElse(edg,FTrue)),rts))
+      }
+
 
