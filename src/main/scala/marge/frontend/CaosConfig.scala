@@ -85,9 +85,9 @@ object CaosConfig extends Configurator[FRTS]:
                   x.feats.mkString(", ") +
                   "\n== Products ==\n" +
                   x.products
-                    .toList.sorted
+                    .toList.sortWith(_.size < _.size)
                     .zipWithIndex
-                    .map((p,i)=>s" ${i+1}. ${p.mkString(", ")}${
+                    .map((p,i)=>s" ${i+1}. ${p.toList.sorted.mkString(", ")}${
                       if p==x.main then " [selected]" else ""}")
                     .mkString("\n"), Text),
      // "View debug (simpler)" -> view[RxGraph](RxGraph.toMermaidPlain, Text).expand,

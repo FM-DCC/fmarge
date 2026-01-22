@@ -1,4 +1,4 @@
-val scala3Version = "3.3.1"
+val scala3Version = "3.3.7"
 
 lazy val caos = project.in(file("lib/caos"))
   .enablePlugins(ScalaJSPlugin)
@@ -9,6 +9,7 @@ lazy val marge = project.in(file("."))
   .settings(
     name := "marge",
     version := "0.1.0",
+    scalacOptions ++= Seq("-deprecation","-indent","-feature"),
     scalaVersion := scala3Version,
     scalaJSUseMainModuleInitializer := true,
     Compile / mainClass := Some("marge.frontend.Main"),

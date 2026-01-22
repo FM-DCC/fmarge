@@ -136,6 +136,7 @@ object Syntax:
 
 
   object Examples:
+    import scala.language.implicitConversions
     implicit def s2n(str:String): QName = QName(List(str))
     val a = s2n("a")
     val s1 = s2n("s1")
