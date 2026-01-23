@@ -75,7 +75,7 @@ object CaosConfig extends Configurator[FRTS]:
    val widgets = List(
 //     "View State (DB)" -> view[FRTS](_.toString, Text).expand,
      "View FRTS" -> view[FRTS](Show.apply, Text).moveTo(1),
-     "View RTS" -> view[FRTS](x => Show(x.getRTS), Text).moveTo(1),
+     "View RTS variant" -> view[FRTS](x => Show(x.getRTS), Text).moveTo(1),
      html("<h2>Main functionalities</h2>"),
      "Products (feature combinations)" -> view[FRTS](x =>
                   val sel = x.main.toList.sorted.mkString(", ")
@@ -95,8 +95,8 @@ object CaosConfig extends Configurator[FRTS]:
 //     "experiment" -> view[FRTS](x => test.map(_.dnf).mkString("\n"), Text).expand,
 //     "experiment2" -> view[FRTS](x => test.map(_.products(Set("a","b"))).mkString("\n"), Text).expand,
      "FRTS: draw" -> view[FRTS](g => toMermaid(g), Mermaid),
-     "RTS: Step-by-step" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaid, _.show, Mermaid).expand,
-     "TS: flattened" -> lts((e:FRTS)=>e.getRTS,
+     "RTS variant: Step-by-step" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaid, _.show, Mermaid).expand,
+     "TS variant: flattened" -> lts((e:FRTS)=>e.getRTS,
        RTSSemantics,
        x => Show.simpler(x),//x.inits.toString,
        _.toString),
@@ -109,15 +109,18 @@ object CaosConfig extends Configurator[FRTS]:
            if ae._2==FExp.FTrue
            then ae._1.toString
            else s"${ae._1} if ${Show(ae._2)}")),
-     "Possible problems" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
-       case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
-       case m => m.mkString("\n")
+     "Possible problems of the RTS variant" -> view[FRTS](r=>AnalyseLTS.randomWalk(r.getRTS)._4 match
+        case Nil => "No deadlocks, unreachable states/edges, nor inconsistencies"
+        case m => m.mkString("\n")
        , Text), //.expand,
      "Number of states and edges"
        -> view((frts:FRTS) => {
        val rts = frts.getRTS
        val (st,eds,done) = SOS.traverse(RTSSemantics,rts,2000)
-       val (stD, edsD, doneD) = SOS.traverse(caos.sos.FinAut.detSOS(RTSSemantics), Set(rts), 2000)
+      //  val (stD, edsD, doneD) = SOS.traverse(caos.sos.FinAut.detSOS(RTSSemantics), Set(rts), 2000)
+       val (iniMin,sosMin,doneMin1) = caos.sos.FinAut.minSOS(RTSSemantics, Set(rts), 2000)
+       val (stMin, edsMin, doneMin2) = SOS.traverse(sosMin, iniMin, 2000)
+       val doneMin = doneMin1 && doneMin2
        val rstates = rts.states.size
        val simpleEdges = (for (_,dests) <- rts.edgs yield dests.size).sum
        val reactions = (for (_,dests) <- rts.on yield dests.size).sum +
@@ -134,7 +137,7 @@ object CaosConfig extends Configurator[FRTS]:
          fsimpleEdges
        }\nhyper edges: ${
          freactions
-       }\n== RTS (size: ${
+       }\n== RTS variant (size: ${
          rstates + simpleEdges + reactions
        }) ==\nstates: ${
          rstates
@@ -142,29 +145,29 @@ object CaosConfig extends Configurator[FRTS]:
          simpleEdges
        }\nhyper edges: ${
          reactions
-       }\n== Flattened TS (size: ${
+       }\n== Flattened TS variant (size: ${
          if !done then ">2000" else st.size + eds
        }) ==\n" +
          (if !done then s"Stopped after traversing 2000 states"
          else s"States: ${st.size}\nEdges: $eds") +
-         s"\n== Flattened TS as minimal DFA (size: ${
-           if !done then ">2000" else stD.size + edsD
+         s"\n== Flattened TS variant as minimal DFA (size: ${
+           if !doneMin then ">2000" else stMin.size + edsMin
          }) ==\n" +
-         (if !doneD then s"Stopped after traversing 2000 states"
-         else s"States: ${stD.size}\nEdges: $edsD")
+         (if !doneMin then s"Stopped after traversing 2000 states"
+         else s"States: ${stMin.size}\nEdges: $edsMin")
      },
        Text),
      html("<h2>Other functionalities</h2>"),
-     "RTS: Step-by-step (simpler)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaidPlain, _.show, Mermaid),
+     "RTS variant: Step-by-step (simpler)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaidPlain, _.show, Mermaid),
      //     "Step-by-step DB" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaid, _.show, Text).expand,
      //     "Step-by-step DB (simpler)" -> steps((e:FRTS)=>e, FRTSSemantics, FRTS.toMermaidPlain, _.show, Text).expand,
-     "RTS: Step-by-step (txt)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, Show.apply, _.show, Text),
+     "RTS variant: Step-by-step (txt)" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, Show.apply, _.show, Text),
      ////     "Step-by-step (debug)" -> steps((e:RxGraph)=>e, Program2.RxSemantics, RxGraph.toMermaid, _.show, Text),
-     "TS: flattened (verbose)" -> lts((e:FRTS)=>e.getRTS,
+     "TS variant: flattened (verbose)" -> lts((e:FRTS)=>e.getRTS,
        RTSSemantics,
        x => Show.simple(x),//x.inits.toString,
        _.toString),
-     "TS: as mCRL2" ->
+     "TS variant: as mCRL2" ->
        view((e:FRTS)=>
            var seed = 0;
            var rtsid = Map[RTS,Int]()
@@ -188,15 +191,15 @@ object CaosConfig extends Configurator[FRTS]:
              s"act\n  ${e.getRTS.edgs.flatMap(x=>x._2.map(y => clean(y._2.toString))).mkString(",")};\n" +
              s"proc\n${procs.toSet.mkString("\n")}"
          ,Text),
-     "TS: flattened (DFA)" -> lts((e:FRTS)=>
+     "TS variant: flattened (DFA)" -> lts((e:FRTS)=>
        Set(e.getRTS), FinAut.detSOS(RTSSemantics),
        x => x.map(_.inits.toString).mkString(","),
        _.toString),
-     "TS: flatenned (trace-equivalence minimal DFA)" -> ltsCustom(
+     "TS variant: flatenned (trace-equivalence minimal DFA)" -> ltsCustom(
        (e:FRTS)=>
          val (i,s,_) = FinAut.minSOS(RTSSemantics,Set(e.getRTS))
          (i,s, x => x.map(_.inits.toString).mkString(","), _.toString)),
-     "TS: trace-equivalent states" -> view(e =>
+     "TS variant: trace-equivalent states" -> view(e =>
        val p = FinAut.partitionNFA( FinAut.sosToNFA(RTSSemantics,Set(e.getRTS))._1)
        p.map(r => r.map(x => x.inits.toString).mkString(",")).mkString(" - ")
        , Text),
