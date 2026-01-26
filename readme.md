@@ -1,9 +1,6 @@
-# Animator of Multi Action Reactive Graphs (MARGe)
+# Animator of Featured Reactive Transition Systems (FReTS)
 
-<!-- Experiments in https://dtinas10.github.io/MARGe/lib/caos/tool/index.html -->
-Run a snapshot of this tool in https://fm-dcc.github.io/MARGe
-
-Tutorial Video: https://www.dropbox.com/scl/fo/cm0tw42zlebqqzh7s054a/h?rlkey=urd0z5ern6akgkc3l8dqq8l7c&dl=0
+Run a snapshot of this tool in https://fm-dcc.github.io/frets
 
 # Caos
 
