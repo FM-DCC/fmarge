@@ -22,8 +22,6 @@ object CaosConfig extends Configurator[FRTS]:
 
   /** Examples of programs that the user can choose from. The first is the default one. */
   val examples: Seq[Example] = List(
-    "FM experiment" -> "init s0\ns0 --> s1: a if sec\ns1 --> s0: b if !sec\na  --! a\n\nfm fa -> fb && (!fa || fb)\nselect sec,fb;"
-      -> "Experimenting with FM solutions",
     "Simple FRTS" -> "init s0\ns0 --> s0: a if f1\ns0 --> s0: b if f2\ns0 --> s1: c if f2 disabled\na --x a\nb ->> c\n\nfm f1\nselect f1,f2; // try also just \"f1\""
       -> "Simple illustrative example of an FRTS, used to motivate the core ideas",
     "Simple FRTS 2" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a"
@@ -32,6 +30,14 @@ object CaosConfig extends Configurator[FRTS]:
       -> "Another variation of the simple FRTS example",
     "Simple FRTS 4" -> "init s0\ns0 --> s0: a if f1\ns0 --> s0: b if f2\ns0 --> s1: c if f2\na --x a\nb --x b\na --x c\nb ->> c\n\nfm f1\nselect f1,f2; // try also just \"f1\""
       -> "Forth (slightly larger) illustrative example of an FRTS, used to motivate the core ideas",
+    "FM experiment" -> "init s0\ns0 --> s1: a if sec\ns1 --> s0: b if !sec\na  --! a\n\nfm fa -> fb && (!fa || fb)\nselect sec,fb;"
+      -> "Experimenting with FM solutions",
+    "perm-TS"
+      -> "// Action-permutation TS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and its subsets\ninit s\ns --> sa: a\ns --> sb: b\ns --> sc: c\nsa --> sab: b\nsa --> sac: c\nsb --> sba: a\nsb --> sbc: c\nsc --> sca: a\nsc --> scb: b\nsab --> sabc: c\nsac --> sacb: b\nsba --> sbac: c \nsbc --> sbca: a\nsca --> scab: b\nscb --> scba: a"
+      -> "TS that accepts all permutations of the actions a,b,c and their subsets.",
+    "perm-FTS"
+      -> "// Action-permutation FTS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and its subsets. Feature selection\n// restrict the length of the TSs.\ninit s\ns --> sa: a     if f1\ns --> sb: b     if f1\ns --> sc: c     if f1\nsa --> sab: b   if f2\nsa --> sac: c   if f2\nsb --> sba: a   if f2\nsb --> sbc: c   if f2\nsc --> sca: a   if f2\nsc --> scb: b   if f2\nsab --> sabc: c if f3\nsac --> sacb: b if f3\nsba --> sbac: c if f3\nsbc --> sbca: a if f3\nsca --> scab: b if f3\nscb --> scba: a if f3\nfm (f3 -> f2) && (f2 -> f1)\nselect f1,f2;"
+      -> "FTS that accepts all permutations of the actions a,b,c and their subsets. Feature selection restricts the length of the TSs.",
 //    "Counter" -> "init s0\ns0 --> s0 : act\nact --! act : offAct disabled\nact ->> offAct : on1 disabled\nact ->> on1"
 //      -> "turns off a transition after 3 times.",
 //    "Penguim" -> "init Son_of_Tweetie\nSon_of_Tweetie --> Special_Penguin\nSpecial_Penguin --> Penguin : Penguim\nPenguin --> Bird : Bird\nBird --> Does_Fly: Fly\n\nBird --! Fly : noFly\nPenguim --! noFly"
