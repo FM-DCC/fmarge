@@ -309,6 +309,23 @@ object CaosConfig extends Configurator[FRTS]:
       |(<a href="https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm">https://en.wikipedia.org/wiki/DFA_minimization</a>),
       |based on partition refinement of the underlying equivalence class.
       |This notion of indistinguishable relies on trace-equivalence and not on bisimilarity.""".stripMargin,
+    "TS variant: as mCRL2" -> "More information on the mCRL2 syntax" ->
+      """<p>This widget translates the RTS variant of the given FRTS into an equivalent
+        |mCRL2 specification.</p>
+        |
+        |<p>For more information on the mCRL2 language, please visit
+        |<a target="_blank" href="https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html">
+        |https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html</a></p>
+        |
+        |<p> This translation is not modular, i.e., the RTS variant if flatenned into a single transition system
+        |before being translated into mCRL2. We are investigating a modular approach, encoding the activation/deactivation
+        |of transitions by parallel processes.</p>
+        |
+        |<p> To use this specification with the mCRL2 toolset, please start a new project in
+        |mcrl2ide, copy-paste the output of this widget into the main specification file, and
+        |then use the mCRL2 toolset to analyse it (e.g., generate the LTS, minimise it (using
+        |trace equivalence, bisimilarity, or other equivanlences), check properties, etc).</p>
+        |""".stripMargin,
   )
 //      """|A program <code>RG</code> is a Reactive Graph with a syntax that follows the following template:
 //         |<pre>
