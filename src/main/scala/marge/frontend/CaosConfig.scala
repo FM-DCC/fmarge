@@ -42,6 +42,8 @@ object CaosConfig extends Configurator[FRTS]:
       -> "Simple RTS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 9 in the companion paper.",
     "Ex.9: simple RTS pr2" -> "// RTS: Simple FRTS after\n// selecting product 2, with\n// features f1 and f2\ninit s0\ns0 --> s0: a \ns0 --> s0: b \ns0 --> s1: c disabled\na --x a\nb ->> c"
       -> "Simple RTS, obtained from the simple FRTS example after selecting product 2, with features f1 and f2. Presented in Fig. 1 and Example 9 in the companion paper.",
+    "Ex.10: simple TS non-min" -> "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// without minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sbc: c\nsab --> sabc: c"
+      -> "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Example 10 in the companion paper.",
     "Ex.11: vending RTS" -> "init s1\ns1 --> s1: sodaRefill\ns1 --> s1: teaRefill\ns1 --> s2: pay\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda\ns3 --> s6: tea\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea"
       -> "Vending machine, implemented using an RTS. Presented in Fig. 3a and Example 11 in the companion paper.",
     "Ex.12: perm RTS"
@@ -49,6 +51,8 @@ object CaosConfig extends Configurator[FRTS]:
       -> "RTS that accepts all permutations of the actions a,b,c and their prefixes. Reactivity is used to disable multiple occurrences of each action. Presented in Example 12 in the companion paper.",
     "Ex.13 simple FRTS" -> "init s0\ns0 --> s0: a if f1\ns0 --> s0: b if f2\ns0 --> s1: c if f2 disabled\na --x a\nb ->> c\n\nfm f1\nselect f1,f2; // try also just \"f1\""
       -> "Simple illustrative example of an FRTS, used to motivate the core ideas. Presented in Fig. 1 and Example 13 in the companion paper.",
+    "Ex.14: simple FTS" -> "// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sbc:  c if f2\nsab --> sabc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\""
+      -> "Simple FTS, obtained from the simple FRTS example without selecting any product, without minimising it. Presented in Example 14 in the companion paper.",
     "Ex.15: vending FRTTS" -> "init s1\ns1 --> s1: sodaRefill if S\ns1 --> s1: teaRefill if T\ns1 --> s2: pay if P\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda if S\ns3 --> s6: tea  if T\ns1 --> s5: soda if !P\ns1 --> s6: tea  if !P\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea\nfm S || T\nselect S,T,P;"
       -> "FRTS version of the vending machine example, presented in Fig. 3b and Example 15 in the companion paper.",
     // "Simple FRTS 2" -> "init s0\ns0 --> s1: a\ns1 --> s0: b\na  --! a"
