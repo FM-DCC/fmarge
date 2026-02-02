@@ -1204,6 +1204,12 @@ $c_Lcaos_frontend_Configurator$.prototype.htmlLeft__T__T2 = (function(block) {
   var y = $f_Lcaos_frontend_widgets_WidgetInfo__moveTo__I__Lcaos_frontend_widgets_WidgetInfo(this$3, 1);
   return new $c_T2("Custom HTML", y)
 });
+$c_Lcaos_frontend_Configurator$.prototype.toExampleDesc__T2__Lcaos_frontend_Configurator$Example = (function(nameCodeDesc) {
+  var example = $as_T($n($as_T2($n(nameCodeDesc)._1__O()))._2__O());
+  var name = $as_T($n($as_T2($n(nameCodeDesc)._1__O()))._1__O());
+  var description = $as_T($n(nameCodeDesc)._2__O());
+  return new $c_Lcaos_frontend_Configurator$Example(example, name, description)
+});
 $c_Lcaos_frontend_Configurator$.prototype.toDocumentation__sci_List__Lcaos_frontend_Documentation = (function(docs) {
   var docs$1 = $m_Lcaos_frontend_Documentation$().$lessinit$greater$default$1__sci_Map();
   return new $c_Lcaos_frontend_Documentation(docs$1).add__sc_Iterable__Lcaos_frontend_Documentation(docs)
@@ -22670,85 +22676,169 @@ function $c_Lmarge_frontend_CaosConfig$() {
     var str$1 = $as_T(str);
     return $m_Lmarge_syntax_Parser$().parseProgram__T__Lmarge_syntax_FRTS(str$1)
   }));
-  var this$157 = new $c_sci_$colon$colon(new $c_Lcaos_frontend_Configurator$Example("// TS: Flatenned \"Simple FRTS\"\n// after selecting product 1,\n// with feature f1\ninit s0\ns0 --> s0a: a ", "Ex.2: simple TS pr1", "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 2 in the companion paper."), new $c_sci_$colon$colon(new $c_Lcaos_frontend_Configurator$Example("// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// and minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sc: c\nsab --> sc: c", "Ex.2: simple TS pr2", "Simple TS, obtained from the simple FRTS example after product 2, with features f1 and f2, and minimising it. Presented in Fig. 1 and Example 2 in the companion paper."), new $c_sci_$colon$colon(new $c_Lcaos_frontend_Configurator$Example("// Flatenned TS to model a vending machine\n// from the vending FRTS after selecting\n// features S, T, and P.\ninit e4\nx1 --> x2: pay\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y1: teaRefill\nz1 --> z2: pay\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill\ne4 --> z1: sodaRefill\ny1 --> x1: sodaRefill\nz1 --> x1: teaRefill", "Ex.3: vending TS", "TS obtained from flatenning the FRTS Vending example after the selecting product with features S and P. Presented in Fig. 2a and Example 3 in the companion paper."), new $c_sci_$colon$colon(new $c_Lcaos_frontend_Configurator$Example("// TS to illustrate different\n// equivalences. States\n// s0 and q0 are trace\n// equivalent but not\n// bisimilar.\ninit s0\ns0-->s1:a\ns1-->s3:c\ns1-->s2:b\n\ninit q0\nq0-->q1:a\nq1-->q3:c\nq0-->q2:a\nq2-->q3:b\n\ncheck Tr(q0) = Tr(s0)\ncheck q0 ~ s0", "Ex.4: equivalences", "RTS to illustrate different equivalences. States s0 and q0 are trace equivalent but not bisimilar. Presented in Example 4 in the companion paper."), new $c_sci_$colon$colon(new $c_Lcaos_frontend_Configurator$Example("init s\ns --> sa: a\ns --> sb: b\ns --> sc: c\nsa --> sab: b\nsa --> sac: c\nsb --> sab: a\nsb --> sbc: c\nsc --> sac: a\nsc --> sbc: b\nsab --> sabc: c\nsac --> sabc: b\nsbc --> sabc: a", "Ex.5: perm TS", "TS that accepts all permutations of the actions a,b,c and their prefixes."), $m_sci_Nil$())))));
+  var $$x9 = $m_Lcaos_frontend_Configurator$();
+  var self = new $c_T2("Ex.2: simple TS pr1", "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 1,\n// with feature f1\ninit s0\ns0 --> s0a: a ");
+  var $$x8 = $n($$x9).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self, "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 2 in the companion paper."));
+  var $$x7 = $m_Lcaos_frontend_Configurator$();
+  var self$1 = new $c_T2("Ex.2: simple TS pr2", "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// and minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sc: c\nsab --> sc: c");
+  var $$x6 = $n($$x7).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$1, "Simple TS, obtained from the simple FRTS example after product 2, with features f1 and f2, and minimising it. Presented in Fig. 1 and Example 2 in the companion paper."));
+  var $$x5 = $m_Lcaos_frontend_Configurator$();
+  var self$2 = new $c_T2("Ex.3: vending TS", "// Flatenned TS to model a vending machine\n// from the vending FRTS after selecting\n// features S, T, and P.\ninit e4\nx1 --> x2: pay\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y1: teaRefill\nz1 --> z2: pay\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill\ne4 --> z1: sodaRefill\ny1 --> x1: sodaRefill\nz1 --> x1: teaRefill");
+  var $$x4 = $n($$x5).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$2, "TS obtained from flatenning the FRTS Vending example after the selecting product with features S and P. Presented in Fig. 2a and Example 3 in the companion paper."));
+  var $$x3 = $m_Lcaos_frontend_Configurator$();
+  var self$3 = new $c_T2("Ex.4: equivalences", "// TS to illustrate different\n// equivalences. States\n// s0 and q0 are trace\n// equivalent but not\n// bisimilar.\ninit s0\ns0-->s1:a\ns1-->s3:c\ns1-->s2:b\n\ninit q0\nq0-->q1:a\nq1-->q3:c\nq0-->q2:a\nq2-->q3:b\n\ncheck Tr(q0) = Tr(s0)\ncheck q0 ~ s0");
+  var $$x2 = $n($$x3).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$3, "RTS to illustrate different equivalences. States s0 and q0 are trace equivalent but not bisimilar. Presented in Example 4 in the companion paper."));
+  var $$x1 = $m_Lcaos_frontend_Configurator$();
+  var self$4 = new $c_T2("Ex.5: perm TS", "init s\ns --> sa: a\ns --> sb: b\ns --> sc: c\nsa --> sab: b\nsa --> sac: c\nsb --> sab: a\nsb --> sbc: c\nsc --> sac: a\nsc --> sbc: b\nsab --> sabc: c\nsac --> sabc: b\nsbc --> sabc: a");
+  var this$107 = new $c_sci_$colon$colon($$x8, new $c_sci_$colon$colon($$x6, new $c_sci_$colon$colon($$x4, new $c_sci_$colon$colon($$x2, new $c_sci_$colon$colon($n($$x1).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$4, "TS that accepts all permutations of the actions a,b,c and their prefixes.")), $m_sci_Nil$())))));
   if (this.Lmarge_frontend_CaosConfig$__f_justTS) {
     var suffix = $m_s_package$().s_package$__f_Nil
   } else {
     $n($m_s_package$().s_package$__f_List);
-    var elems = $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_Lcaos_frontend_Configurator$Example.getArrayOf().constr)([new $c_Lcaos_frontend_Configurator$Example("// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sc:  c if f2\nsab --> sc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\"", "Ex.6: simple FTS", "Simple FTS, obtained from the simple FRTS example without selecting any product. Presented in Fig. 1 and Example 6 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("init e4\nx1 --> x2: pay if P\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x6: tea if !P\nx1 --> x5: soda if !P\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay if P\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y5: tea if !P\ny1 --> y1: teaRefill\nz1 --> z2: pay if P\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z5: soda if !P\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill if T\ne4 --> z1: sodaRefill if S\ny1 --> x1: sodaRefill if S\nz1 --> x1: teaRefill if T\nfm S || T\nselect S,T,P;", "Ex.7: vending FTS", "FTS obtained from flatenning the FRTS Vending example before selecting any product. Presented in Fig. 2a and Example 7 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// Action-permutation FTS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and their prefixes. Feature selection\n// restrict the length of the TSs.\ninit s\ns --> sa: a     if f1\ns --> sb: b     if f1\ns --> sc: c     if f1\nsa --> sab: b   if f2\nsa --> sac: c   if f2\nsb --> sab: a   if f2\nsb --> sbc: c   if f2\nsc --> sac: a   if f2\nsc --> sbc: b   if f2\nsab --> sabc: c if f3\nsac --> sabc: b if f3\nsbc --> sabc: a if f3\nfm (f3 -> f2) && (f2 -> f1)\nselect f1,f2,f3;", "Ex.8: perm FTS", "FTS that accepts all permutations of the actions a,b,c and their prefixes. Feature selection restricts the length of the TSs. Presented in Example 8 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// RTS: Simple FRTS after\n// selecting product 1, with\n// feature f1\ninit s0\ns0 --> s0: a \na --x a", "Ex.9: simple RTS pr1", "Simple RTS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 9 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// RTS: Simple FRTS after\n// selecting product 2, with\n// features f1 and f2\ninit s0\ns0 --> s0: a \ns0 --> s0: b \ns0 --> s1: c disabled\na --x a\nb ->> c", "Ex.9: simple RTS pr2", "Simple RTS, obtained from the simple FRTS example after selecting product 2, with features f1 and f2. Presented in Fig. 1 and Example 9 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// without minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sbc: c\nsab --> sabc: c", "Ex.10: simple TS non-min", "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Example 10 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("init s1\ns1 --> s1: sodaRefill\ns1 --> s1: teaRefill\ns1 --> s2: pay\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda\ns3 --> s6: tea\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea", "Ex.11: vending RTS", "Vending machine, implemented using an RTS. Presented in Fig. 3a and Example 11 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// Action-permutation RTS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and their subsets. Variation that\n// exploits reactivity to forbid\n// multiple occurrences of each action\ninit s\ns --> s: a\ns --> s: b\ns --> s: c\na --x a\nb --x b\nc --x c", "Ex.12: perm RTS", "RTS that accepts all permutations of the actions a,b,c and their prefixes. Reactivity is used to disable multiple occurrences of each action. Presented in Example 12 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("init s0\ns0 --> s0: a if f1\ns0 --> s0: b if f2\ns0 --> s1: c if f2 disabled\na --x a\nb ->> c\n\nfm f1\nselect f1,f2; // try also just \"f1\"", "Ex.13 simple FRTS", "Simple illustrative example of an FRTS, used to motivate the core ideas. Presented in Fig. 1 and Example 13 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sbc:  c if f2\nsab --> sabc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\"", "Ex.14: simple FTS non-min", "Simple FTS, obtained from the simple FRTS example without selecting any product, without minimising it. Presented in Example 14 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("init s1\ns1 --> s1: sodaRefill if S\ns1 --> s1: teaRefill if T\ns1 --> s2: pay if P\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda if S\ns3 --> s6: tea  if T\ns1 --> s5: soda if !P\ns1 --> s6: tea  if !P\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea\nfm S || T\nselect S,T,P;", "Ex.15: vending FRTTS", "FRTS version of the vending machine example, presented in Fig. 3b and Example 15 in the companion paper."), new $c_Lcaos_frontend_Configurator$Example("init s0\n[e1] s0 --> s0: a if f1\n[e2] s0 --> s0: b if f2\n[e3] s0 --> s1: b if f2 disabled\n\ne1 --x e1\ne2 ->> e3\n\nfm f1\nselect f1,f2; // try also just \"f1\"", "Simple FRTS (w/o shortcuts)", "Variation of the simple FRTS example, using aliases for edges in the reaction definitions"), new $c_Lcaos_frontend_Configurator$Example("init s0\ns0 --> s1: a if sec\ns1 --> s0: b if !sec\na  --! a\n\nfm fa -> fb && (!fa || fb)\nselect sec,fb;", "FM experiment", "Experimenting with FM solutions"), new $c_Lcaos_frontend_Configurator$Example("aut s {\n  init 0\n  0 --> 1 : a\n  1 --> 2 : b\n  2 --> 0 : d disabled\n  a --! b\n}\naut w {\n  init 0\n  0 --> 1 : a\n  1 --> 0 : c\n  a --! a \n}\n// intrusion\nw.c ->> s.b", "Intrusive product", ""), new $c_Lcaos_frontend_Configurator$Example("init 0\n     0 --> 1: a\n[e2] 1 --> 2: b\n[e3] 2 --> 3: b disabled\n\na ->> b\na --! e3", "Conflict", "Possible conflict detected in the analysis."), new $c_Lcaos_frontend_Configurator$Example("init setup\nsetup --> setup : Safe\nsetup --> setup : Unsafe\nsetup --> setup : Encrypt\nsetup --> setup : Dencrypt\nsetup --> ready\nready --> setup\nready --> received : Receive\nreceived --> routed_safe : ERoute  disabled\nreceived --> routed_unsafe : Route\nrouted_safe --> sent : ESend       disabled\nrouted_unsafe --> sent : Send\nrouted_unsafe --> sent_encrypt : ESend disabled\nsent_encrypt --> ready : Ready\nsent --> ready : Ready\n\nSafe ->> ERoute\nSafe --! Route\nUnsafe --! ERoute\nUnsafe ->> Route\nEncrypt --! Send\nEncrypt ->> ESend\nDencrypt ->> Send\nDencrypt --! ESend", "Dynamic SPL", "Example of a Dynamic Software Product Line, borrowed from Fig 1 in Maxime Cordy et al. <em>Model Checking Adaptive Software with Featured Transition Systems</em>"), new $c_Lcaos_frontend_Configurator$Example("init 0\n0 --> 1: 0\n1 --> 0: 0\n1 --> 3: 1\n2 --> 1: 0\n2 --> 3: 1\n4 --> 3: 0\n4 --> 3: 1\n0 --> 3: 1\n3 --> 5: 0\n3 --> 5: 1\n5 --> 5: 0\n5 --> 5: 1", "NFA-DFA 1", "Experimenting with determinisatoin and minimisation of automata"), new $c_Lcaos_frontend_Configurator$Example("init q0\nq0 --> q0: a\nq0 --> q0: b\nq0 --> q1: a\nq1 --> q2: b", "NFA-DFA 2", "Simple example of an NFA that could be determinised"), new $c_Lcaos_frontend_Configurator$Example("init q0\nq0 --> q1: a\nq1 --> q1: a", "Min 1", "Experiment to minimise automata"), new $c_Lcaos_frontend_Configurator$Example("init q0\nq0 --> q1: a\nq0 --> q2: b", "Min 2", "Experiment to minimise automata"), new $c_Lcaos_frontend_Configurator$Example("aut a {\n  init 0\n  0 --> 1 : a disabled\n}\naut b {\n  init 0\n  0 --> 1 : b0\n  1 --> 0 : b disabled\n}\naut c {\n  init 0\n  0 --> 1 : c0\n  1 --> 0 : c disabled\n}\n// intrusion\nb.b  ->> a.a\nc.c  ->> a.a\nb.b0 ->> c.c\nc.c0 ->> b.b\nb.b0 --#-- c.c0", "Parallel", "Experiments with multiple components.")]));
+    var $$x50 = $m_sr_ScalaRunTime$();
+    var $$x49 = $m_Lcaos_frontend_Configurator$();
+    var self$5 = new $c_T2("Ex.6: simple FTS", "// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sc:  c if f2\nsab --> sc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\"");
+    var $$x48 = $n($$x49).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$5, "Simple FTS, obtained from the simple FRTS example without selecting any product. Presented in Fig. 1 and Example 6 in the companion paper."));
+    var $$x47 = $m_Lcaos_frontend_Configurator$();
+    var self$6 = new $c_T2("Ex.7: vending FTS", "init e4\nx1 --> x2: pay if P\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x6: tea if !P\nx1 --> x5: soda if !P\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay if P\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y5: tea if !P\ny1 --> y1: teaRefill\nz1 --> z2: pay if P\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z5: soda if !P\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill if T\ne4 --> z1: sodaRefill if S\ny1 --> x1: sodaRefill if S\nz1 --> x1: teaRefill if T\nfm S || T\nselect S,T,P;");
+    var $$x46 = $n($$x47).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$6, "FTS obtained from flatenning the FRTS Vending example before selecting any product. Presented in Fig. 2a and Example 7 in the companion paper."));
+    var $$x45 = $m_Lcaos_frontend_Configurator$();
+    var self$7 = new $c_T2("Ex.8: perm FTS", "// Action-permutation FTS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and their prefixes. Feature selection\n// restrict the length of the TSs.\ninit s\ns --> sa: a     if f1\ns --> sb: b     if f1\ns --> sc: c     if f1\nsa --> sab: b   if f2\nsa --> sac: c   if f2\nsb --> sab: a   if f2\nsb --> sbc: c   if f2\nsc --> sac: a   if f2\nsc --> sbc: b   if f2\nsab --> sabc: c if f3\nsac --> sabc: b if f3\nsbc --> sabc: a if f3\nfm (f3 -> f2) && (f2 -> f1)\nselect f1,f2,f3;");
+    var $$x44 = $n($$x45).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$7, "FTS that accepts all permutations of the actions a,b,c and their prefixes. Feature selection restricts the length of the TSs. Presented in Example 8 in the companion paper."));
+    var $$x43 = $m_Lcaos_frontend_Configurator$();
+    var self$8 = new $c_T2("Ex.9: simple RTS pr1", "// RTS: Simple FRTS after\n// selecting product 1, with\n// feature f1\ninit s0\ns0 --> s0: a \na --x a");
+    var $$x42 = $n($$x43).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$8, "Simple RTS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 9 in the companion paper."));
+    var $$x41 = $m_Lcaos_frontend_Configurator$();
+    var self$9 = new $c_T2("Ex.9: simple RTS pr2", "// RTS: Simple FRTS after\n// selecting product 2, with\n// features f1 and f2\ninit s0\ns0 --> s0: a \ns0 --> s0: b \ns0 --> s1: c disabled\na --x a\nb ->> c");
+    var $$x40 = $n($$x41).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$9, "Simple RTS, obtained from the simple FRTS example after selecting product 2, with features f1 and f2. Presented in Fig. 1 and Example 9 in the companion paper."));
+    var $$x39 = $m_Lcaos_frontend_Configurator$();
+    var self$10 = new $c_T2("Ex.10: simple TS non-min", "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// without minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sbc: c\nsab --> sabc: c");
+    var $$x38 = $n($$x39).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$10, "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Example 10 in the companion paper."));
+    var $$x37 = $m_Lcaos_frontend_Configurator$();
+    var self$11 = new $c_T2("Ex.11: vending RTS", "init s1\ns1 --> s1: sodaRefill\ns1 --> s1: teaRefill\ns1 --> s2: pay\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda\ns3 --> s6: tea\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea");
+    var $$x36 = $n($$x37).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$11, "Vending machine, implemented using an RTS. Presented in Fig. 3a and Example 11 in the companion paper."));
+    var $$x35 = $m_Lcaos_frontend_Configurator$();
+    var self$12 = new $c_T2("Ex.12: perm RTS", "// Action-permutation RTS, which \n// recognises the language given\n// by all perumations of {a,b,c}\n// and their subsets. Variation that\n// exploits reactivity to forbid\n// multiple occurrences of each action\ninit s\ns --> s: a\ns --> s: b\ns --> s: c\na --x a\nb --x b\nc --x c");
+    var $$x34 = $n($$x35).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$12, "RTS that accepts all permutations of the actions a,b,c and their prefixes. Reactivity is used to disable multiple occurrences of each action. Presented in Example 12 in the companion paper."));
+    var $$x33 = $m_Lcaos_frontend_Configurator$();
+    var self$13 = new $c_T2("Ex.13 simple FRTS", "init s0\ns0 --> s0: a if f1\ns0 --> s0: b if f2\ns0 --> s1: c if f2 disabled\na --x a\nb ->> c\n\nfm f1\nselect f1,f2; // try also just \"f1\"");
+    var $$x32 = $n($$x33).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$13, "Simple illustrative example of an FRTS, used to motivate the core ideas. Presented in Fig. 1 and Example 13 in the companion paper."));
+    var $$x31 = $m_Lcaos_frontend_Configurator$();
+    var self$14 = new $c_T2("Ex.14: simple FTS non-min", "// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sbc:  c if f2\nsab --> sabc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\"");
+    var $$x30 = $n($$x31).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$14, "Simple FTS, obtained from the simple FRTS example without selecting any product, without minimising it. Presented in Example 14 in the companion paper."));
+    var $$x29 = $m_Lcaos_frontend_Configurator$();
+    var self$15 = new $c_T2("Ex.15: vending FRTTS", "init s1\ns1 --> s1: sodaRefill if S\ns1 --> s1: teaRefill if T\ns1 --> s2: pay if P\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda if S\ns3 --> s6: tea  if T\ns1 --> s5: soda if !P\ns1 --> s6: tea  if !P\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea\nfm S || T\nselect S,T,P;");
+    var $$x28 = $n($$x29).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$15, "FRTS version of the vending machine example, presented in Fig. 3b and Example 15 in the companion paper."));
+    var $$x27 = $m_Lcaos_frontend_Configurator$();
+    var self$16 = new $c_T2("Simple FRTS (w/o shortcuts)", "init s0\n[e1] s0 --> s0: a if f1\n[e2] s0 --> s0: b if f2\n[e3] s0 --> s1: b if f2 disabled\n\ne1 --x e1\ne2 ->> e3\n\nfm f1\nselect f1,f2; // try also just \"f1\"");
+    var $$x26 = $n($$x27).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$16, "Variation of the simple FRTS example, using aliases for edges in the reaction definitions"));
+    var $$x25 = $m_Lcaos_frontend_Configurator$();
+    var self$17 = new $c_T2("FM experiment", "init s0\ns0 --> s1: a if sec\ns1 --> s0: b if !sec\na  --! a\n\nfm fa -> fb && (!fa || fb)\nselect sec,fb;");
+    var $$x24 = $n($$x25).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$17, "Experimenting with FM solutions"));
+    var nameCode = new $c_T2("Intrusive product", "aut s {\n  init 0\n  0 --> 1 : a\n  1 --> 2 : b\n  2 --> 0 : d disabled\n  a --! b\n}\naut w {\n  init 0\n  0 --> 1 : a\n  1 --> 0 : c\n  a --! a \n}\n// intrusion\nw.c ->> s.b");
+    var example = $as_T(nameCode.T2__f__2);
+    var name = $as_T(nameCode.T2__f__1);
+    var $$x23 = new $c_Lcaos_frontend_Configurator$Example(example, name, "");
+    var $$x22 = $m_Lcaos_frontend_Configurator$();
+    var self$18 = new $c_T2("Conflict", "init 0\n     0 --> 1: a\n[e2] 1 --> 2: b\n[e3] 2 --> 3: b disabled\n\na ->> b\na --! e3");
+    var $$x21 = $n($$x22).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$18, "Possible conflict detected in the analysis."));
+    var $$x20 = $m_Lcaos_frontend_Configurator$();
+    var self$19 = new $c_T2("Dynamic SPL", "init setup\nsetup --> setup : Safe\nsetup --> setup : Unsafe\nsetup --> setup : Encrypt\nsetup --> setup : Dencrypt\nsetup --> ready\nready --> setup\nready --> received : Receive\nreceived --> routed_safe : ERoute  disabled\nreceived --> routed_unsafe : Route\nrouted_safe --> sent : ESend       disabled\nrouted_unsafe --> sent : Send\nrouted_unsafe --> sent_encrypt : ESend disabled\nsent_encrypt --> ready : Ready\nsent --> ready : Ready\n\nSafe ->> ERoute\nSafe --! Route\nUnsafe --! ERoute\nUnsafe ->> Route\nEncrypt --! Send\nEncrypt ->> ESend\nDencrypt ->> Send\nDencrypt --! ESend");
+    var $$x19 = $n($$x20).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$19, "Example of a Dynamic Software Product Line, borrowed from Fig 1 in Maxime Cordy et al. <em>Model Checking Adaptive Software with Featured Transition Systems</em>"));
+    var $$x18 = $m_Lcaos_frontend_Configurator$();
+    var self$20 = new $c_T2("NFA-DFA 1", "init 0\n0 --> 1: 0\n1 --> 0: 0\n1 --> 3: 1\n2 --> 1: 0\n2 --> 3: 1\n4 --> 3: 0\n4 --> 3: 1\n0 --> 3: 1\n3 --> 5: 0\n3 --> 5: 1\n5 --> 5: 0\n5 --> 5: 1");
+    var $$x17 = $n($$x18).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$20, "Experimenting with determinisatoin and minimisation of automata"));
+    var $$x16 = $m_Lcaos_frontend_Configurator$();
+    var self$21 = new $c_T2("NFA-DFA 2", "init q0\nq0 --> q0: a\nq0 --> q0: b\nq0 --> q1: a\nq1 --> q2: b");
+    var $$x15 = $n($$x16).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$21, "Simple example of an NFA that could be determinised"));
+    var $$x14 = $m_Lcaos_frontend_Configurator$();
+    var self$22 = new $c_T2("Min 1", "init q0\nq0 --> q1: a\nq1 --> q1: a");
+    var $$x13 = $n($$x14).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$22, "Experiment to minimise automata"));
+    var $$x12 = $m_Lcaos_frontend_Configurator$();
+    var self$23 = new $c_T2("Min 2", "init q0\nq0 --> q1: a\nq0 --> q2: b");
+    var $$x11 = $n($$x12).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$23, "Experiment to minimise automata"));
+    var $$x10 = $m_Lcaos_frontend_Configurator$();
+    var self$24 = new $c_T2("Parallel", "aut a {\n  init 0\n  0 --> 1 : a disabled\n}\naut b {\n  init 0\n  0 --> 1 : b0\n  1 --> 0 : b disabled\n}\naut c {\n  init 0\n  0 --> 1 : c0\n  1 --> 0 : c disabled\n}\n// intrusion\nb.b  ->> a.a\nc.c  ->> a.a\nb.b0 ->> c.c\nc.c0 ->> b.b\nb.b0 --#-- c.c0");
+    var elems = $n($$x50).wrapRefArray__AO__sci_ArraySeq(new ($d_Lcaos_frontend_Configurator$Example.getArrayOf().constr)([$$x48, $$x46, $$x44, $$x42, $$x40, $$x38, $$x36, $$x34, $$x32, $$x30, $$x28, $$x26, $$x24, $$x23, $$x21, $$x19, $$x17, $$x15, $$x13, $$x11, $n($$x10).toExampleDesc__T2__Lcaos_frontend_Configurator$Example(new $c_T2(self$24, "Experiments with multiple components."))]));
     var suffix = $m_sci_Nil$().prependedAll__sc_IterableOnce__sci_List(elems)
   };
-  this.Lmarge_frontend_CaosConfig$__f_examples = this$157.appendedAll__sc_IterableOnce__sci_List(suffix);
+  this.Lmarge_frontend_CaosConfig$__f_examples = this$107.appendedAll__sc_IterableOnce__sci_List(suffix);
   this.Lmarge_frontend_CaosConfig$__f_widgets = (this.Lmarge_frontend_CaosConfig$__f_justTS ? this.widgetsTS__sci_List() : this.widgetsFRTS__sci_List());
   if (this.Lmarge_frontend_CaosConfig$__f_justTS) {
-    var this$158 = $n($m_s_Predef$().s_Predef$__f_Map);
+    var this$108 = $n($m_s_Predef$().s_Predef$__f_Map);
     var elems$1 = $m_sr_ScalaRunTime$().wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([]));
-    var $$x1 = this$158.from__sc_IterableOnce__sci_Map(elems$1)
+    var $$x51 = this$108.from__sc_IterableOnce__sci_Map(elems$1)
   } else {
-    var this$175 = $n($m_s_Predef$().s_Predef$__f_Map);
-    var $$x5 = $m_sr_ScalaRunTime$();
-    var this$160 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex) => {
+    var this$125 = $n($m_s_Predef$().s_Predef$__f_Map);
+    var $$x55 = $m_sr_ScalaRunTime$();
+    var this$110 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex) => {
       var ex$1 = $as_T2(ex);
       return $as_T($n(ex$1)._1__O())
     })))));
-    var y = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$160))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$19) => {
+    var y = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$110))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$19) => {
       var _$19$1 = $as_T(_$19);
-      var this$161 = $n(_$19$1);
-      return ((this$161.length >= 0) && ($as_T(this$161.substring(0, 4)) === "FRTS"))
+      var this$111 = $n(_$19$1);
+      return ((this$111.length >= 0) && ($as_T(this$111.substring(0, 4)) === "FRTS"))
     })));
-    var $$x4 = new $c_T2("frtsBtn", y);
-    var this$164 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$2) => {
+    var $$x54 = new $c_T2("frtsBtn", y);
+    var this$114 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$2) => {
       var ex$3 = $as_T2(ex$2);
       return $as_T($n(ex$3)._1__O())
     })))));
-    var y$1 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$164))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$20) => {
+    var y$1 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$114))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$20) => {
       var _$20$1 = $as_T(_$20);
-      var this$165 = $n(_$20$1);
-      return ((this$165.length >= 0) && ($as_T(this$165.substring(0, 3)) === "RTS"))
+      var this$115 = $n(_$20$1);
+      return ((this$115.length >= 0) && ($as_T(this$115.substring(0, 3)) === "RTS"))
     })));
-    var $$x3 = new $c_T2("rtsBtn", y$1);
-    var this$168 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$3$1) => {
+    var $$x53 = new $c_T2("rtsBtn", y$1);
+    var this$118 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$3$1) => {
       var ex$4 = $as_T2(ex$3$1);
       return $as_T($n(ex$4)._1__O())
     })))));
-    var y$2 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$168))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$21) => {
+    var y$2 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$118))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$21) => {
       var _$21$1 = $as_T(_$21);
-      var this$169 = $n(_$21$1);
-      return ((this$169.length >= 0) && ($as_T(this$169.substring(0, 3)) === "FTS"))
+      var this$119 = $n(_$21$1);
+      return ((this$119.length >= 0) && ($as_T(this$119.substring(0, 3)) === "FTS"))
     })));
-    var $$x2 = new $c_T2("ftsBtn", y$2);
-    var this$172 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$4$1) => {
+    var $$x52 = new $c_T2("ftsBtn", y$2);
+    var this$122 = $n($as_sc_IterableOnceOps($n(this.Lmarge_frontend_CaosConfig$__f_widgets).map__F1__O(new $c_sjsr_AnonFunction1(((ex$4$1) => {
       var ex$5 = $as_T2(ex$4$1);
       return $as_T($n(ex$5)._1__O())
     })))));
-    var y$3 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$172))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$22) => {
+    var y$3 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce(this$122))).filter__F1__O(new $c_sjsr_AnonFunction1(((_$22) => {
       var _$22$1 = $as_T(_$22);
-      var this$173 = $n(_$22$1);
-      return ((this$173.length >= 0) && ($as_T(this$173.substring(0, 2)) === "TS"))
+      var this$123 = $n(_$22$1);
+      return ((this$123.length >= 0) && ($as_T(this$123.substring(0, 2)) === "TS"))
     })));
-    var elems$2 = $n($$x5).wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$$x4, $$x3, $$x2, new $c_T2("tsBtn", y$3)]));
-    var $$x1 = this$175.from__sc_IterableOnce__sci_Map(elems$2)
+    var elems$2 = $n($$x55).wrapRefArray__AO__sci_ArraySeq(new ($d_T2.getArrayOf().constr)([$$x54, $$x53, $$x52, new $c_T2("tsBtn", y$3)]));
+    var $$x51 = this$125.from__sc_IterableOnce__sci_Map(elems$2)
   };
-  this.Lmarge_frontend_CaosConfig$__f_toggles = $$x1;
+  this.Lmarge_frontend_CaosConfig$__f_toggles = $$x51;
   this.Lmarge_frontend_CaosConfig$__f_footer = ($m_sc_StringOps$(), $m_sc_StringOps$().stripMargin$extension__T__C__T("Source code at: <a target=\"_blank\"\n      | href=\"https://github.com/fm-dcc/frets\">\n      | https://github.com/fm-dcc/frets</a>. This is a companion tool for\n      | a paper submitted to VARS 2026, using <a target=\"_blank\"\n      | href=\"https://github.com/arcalab/CAOS\">\n      | CAOS</a> backend. Click the (?) on the headers of the widgets for more information.", 124));
   $m_sc_StringOps$();
   $m_sc_StringOps$().stripMargin$extension__T__C__T(" ", 124);
-  var $$x9 = $m_Lcaos_frontend_Configurator$();
-  var self = this.Lmarge_frontend_CaosConfig$__f_languageName;
-  var self$1 = new $c_T2(self, "More information on the syntax of Reactive Graph");
-  var $$x8 = new $c_T2(self$1, "A Feature Reactive Transition System is a transition system where transitions can be <ul><li>enabled or disabled at compile time based on feature expressions.<li>enabled or disabled at runtime based reactions.</li></ul>The syntax for defining an FRTS is illustrated by the following example: <pre>init &lt;initial-state&gt;\n// Add two lablelled transitions with a feature expression (optional)\n&lt;source-state&gt;  --&gt; &lt;target-state&gt; by &lt;action&gt; if &lt;feature-expression&gt;\n&lt;source-state&gt;  --&gt; &lt;target-state&gt; by &lt;action&gt; disabled // starts disabled\n// (add more transitions)\n\n// Enable an transition action2 when action1 is performed\n&lt;action1&gt; -&gt; &lt;action2&gt;\n\n// Disable an transition action2 when action1 is performed\n&lt;action1&gt; --x &lt;action2&gt;\n// Define a feature model as a constraint over feature names\nfm &lt;feature-expression&gt;\n// Select a set of features to be used in the analsyses\nselect &lt;feature-names*&gt;;</pre><p> where <code>feature_expression</code> is a boolean expression over features, and <code>feature-names*</code> is a comma-separated list of features chosen for the current product.</p>");
-  var self$2 = new $c_T2("TS: flattened", "More information on the TS visualization");
+  var $$x61 = $m_Lcaos_frontend_Configurator$();
+  var self$25 = this.Lmarge_frontend_CaosConfig$__f_languageName;
+  var self$26 = new $c_T2(self$25, "More information on the syntax of Reactive Graph");
+  var $$x60 = new $c_T2(self$26, "A Feature Reactive Transition System is a transition system where transitions can be <ul><li>enabled or disabled at compile time based on feature expressions.<li>enabled or disabled at runtime based reactions.</li></ul>The syntax for defining an FRTS is illustrated by the following example: <pre>init &lt;initial-state&gt;\n// Add two lablelled transitions with a feature expression (optional)\n&lt;source-state&gt;  --&gt; &lt;target-state&gt; by &lt;action&gt; if &lt;feature-expression&gt;\n&lt;source-state&gt;  --&gt; &lt;target-state&gt; by &lt;action&gt; disabled // starts disabled\n// (add more transitions)\n\n// Enable an transition action2 when action1 is performed\n&lt;action1&gt; -&gt; &lt;action2&gt;\n\n// Disable an transition action2 when action1 is performed\n&lt;action1&gt; --x &lt;action2&gt;\n// Define a feature model as a constraint over feature names\nfm &lt;feature-expression&gt;\n// Select a set of features to be used in the analsyses\nselect &lt;feature-names*&gt;;</pre><p> where <code>feature_expression</code> is a boolean expression over features, and <code>feature-names*</code> is a comma-separated list of features chosen for the current product.</p>");
+  var self$27 = new $c_T2("TS: flattened", "More information on the TS visualization");
   $m_sc_StringOps$();
   var y$4 = $m_sc_StringOps$().stripMargin$extension__T__C__T("<p>This widget depicts the flattened variant for the selected product of the given FRTS.</p>\n        |\n        |<p>The names of the states include both the original name in the given FRTS and a number\n        |indicating the number of active transitions. E.g., <code>s0[2]</code> represents\n        |the state <code>s0</code> in the FRTS with 2 active transitions. Note that this name is not\n        |unique. To see the list of all active transitions, which provides unique names,\n        |please use the widget \"TS: flattened (verbose).\" </p>\n        |", 124);
-  var $$x7 = new $c_T2(self$2, y$4);
-  var self$3 = new $c_T2("TS: flatenned (trace-equivalence minimal DFA)", "More information on how to mininmise the TS)");
+  var $$x59 = new $c_T2(self$27, y$4);
+  var self$28 = new $c_T2("TS: flatenned (trace-equivalence minimal DFA)", "More information on how to mininmise the TS)");
   $m_sc_StringOps$();
   var y$5 = $m_sc_StringOps$().stripMargin$extension__T__C__T("We use Hopcroft's algorithm to find and merge indistinguishable states\n        |(<a href=\"https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm\">https://en.wikipedia.org/wiki/DFA_minimization</a>),\n        |based on partition refinement of the underlying equivalence class.\n        |This notion of indistinguishable relies on trace-equivalence and not on bisimilarity.", 124);
-  var $$x6 = new $c_T2(self$3, y$5);
-  var self$4 = new $c_T2("TS: trace-equivalent states", "More information on how to mininmise the TS)");
+  var $$x58 = new $c_T2(self$28, y$5);
+  var self$29 = new $c_T2("TS: trace-equivalent states", "More information on how to mininmise the TS)");
   $m_sc_StringOps$();
   var y$6 = $m_sc_StringOps$().stripMargin$extension__T__C__T("We use Hopcroft's algorithm to find indistinguishable states\n      |(<a href=\"https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm\">https://en.wikipedia.org/wiki/DFA_minimization</a>),\n      |based on partition refinement of the underlying equivalence class.\n      |This notion of indistinguishable relies on trace-equivalence and not on bisimilarity.", 124);
-  this.Lmarge_frontend_CaosConfig$__f_documentation = $n($$x9).toDocumentation__sci_List__Lcaos_frontend_Documentation(new $c_sci_$colon$colon($$x8, new $c_sci_$colon$colon($$x7, new $c_sci_$colon$colon($$x6, new $c_sci_$colon$colon(new $c_T2(self$4, y$6), $m_sci_Nil$())))))
+  var $$x57 = new $c_T2(self$29, y$6);
+  var self$30 = new $c_T2("TS variant: as mCRL2", "More information on the mCRL2 syntax");
+  var y$7 = this.mCRL2doc__T__T("the RTS variant of the given FRTS");
+  var $$x56 = new $c_T2(self$30, y$7);
+  var self$31 = new $c_T2("As mCRL2", "More information on the mCRL2 syntax");
+  var y$8 = this.mCRL2doc__T__T("the given TS");
+  this.Lmarge_frontend_CaosConfig$__f_documentation = $n($$x61).toDocumentation__sci_List__Lcaos_frontend_Documentation(new $c_sci_$colon$colon($$x60, new $c_sci_$colon$colon($$x59, new $c_sci_$colon$colon($$x58, new $c_sci_$colon$colon($$x57, new $c_sci_$colon$colon($$x56, new $c_sci_$colon$colon(new $c_T2(self$31, y$8), $m_sci_Nil$())))))))
 }
 $c_Lmarge_frontend_CaosConfig$.prototype = new $h_O();
 $c_Lmarge_frontend_CaosConfig$.prototype.constructor = $c_Lmarge_frontend_CaosConfig$;
@@ -22797,7 +22887,7 @@ $c_Lmarge_frontend_CaosConfig$.prototype.widgetsTS__sci_List = (function() {
     return $n(_$1$1).show__T()
   })), $m_Lcaos_view_Mermaid$()));
   var y = $f_Lcaos_frontend_widgets_WidgetInfo__expand__Lcaos_frontend_widgets_WidgetInfo(this$3);
-  var $$x23 = new $c_T2("TS: Step-by-step", y);
+  var $$x23 = new $c_T2("Step-by-step", y);
   var y$1 = $m_Lcaos_frontend_Configurator$().view__F1__Lcaos_view_ViewType__Lcaos_frontend_widgets_WidgetInfo(new $c_sjsr_AnonFunction1(((frts) => {
     var frts$1 = $as_Lmarge_syntax_FRTS(frts);
     var this$6 = $n(frts$1);
@@ -22992,7 +23082,7 @@ $c_Lmarge_frontend_CaosConfig$.prototype.widgetsTS__sci_List = (function() {
     var this$52 = $n($m_sci_Set$().from__sc_IterableOnce__sci_Set(this$51));
     return (((((("init " + init) + ";\n") + ("act\n  " + $$x11)) + ";\n") + "proc\n") + $f_sc_IterableOnceOps__mkString__T__T__T__T(this$52, "", "\n", ""))
   })), $m_Lcaos_view_Text$());
-  var $$x12 = new $c_T2("TS (as mCRL2)", y$5);
+  var $$x12 = new $c_T2("As mCRL2", y$5);
   var $$x6 = $m_Lcaos_frontend_Configurator$();
   var $$x4 = new $c_sjsr_AnonFunction1(((e$4$1) => {
     var e$7 = $as_Lmarge_syntax_FRTS(e$4$1);
@@ -23016,7 +23106,7 @@ $c_Lmarge_frontend_CaosConfig$.prototype.widgetsTS__sci_List = (function() {
     var this$60 = $n(this$59.Lmarge_syntax_RTS$QName__f_n);
     return $f_sc_IterableOnceOps__mkString__T__T__T__T(this$60, "", "/", "")
   })), 80);
-  var $$x7 = new $c_T2("TS (DFA)", y$6);
+  var $$x7 = new $c_T2("As DFA", y$6);
   var y$7 = $m_Lcaos_frontend_Configurator$().ltsCustom__F1__I__Lcaos_frontend_widgets_WidgetInfo(new $c_sjsr_AnonFunction1(((e$5$1) => {
     var e$8 = $as_Lmarge_syntax_FRTS(e$5$1);
     matchResult9$1: {
@@ -23054,7 +23144,7 @@ $c_Lmarge_frontend_CaosConfig$.prototype.widgetsTS__sci_List = (function() {
     }));
     return new $c_T4(i$2, s$2$1, _3, _4)
   })), 80);
-  return new $c_sci_$colon$colon($$x23, new $c_sci_$colon$colon($$x22, new $c_sci_$colon$colon($$x19, new $c_sci_$colon$colon($$x12, new $c_sci_$colon$colon($$x7, new $c_sci_$colon$colon(new $c_T2("TS (trace-equivalence minimal DFA)", y$7), $m_sci_Nil$()))))))
+  return new $c_sci_$colon$colon($$x23, new $c_sci_$colon$colon($$x22, new $c_sci_$colon$colon($$x19, new $c_sci_$colon$colon($$x12, new $c_sci_$colon$colon($$x7, new $c_sci_$colon$colon(new $c_T2("As a trace-equivalence minimal DFA", y$7), $m_sci_Nil$()))))))
 });
 $c_Lmarge_frontend_CaosConfig$.prototype.widgetsFRTS__sci_List = (function() {
   $n($m_s_package$().s_package$__f_List);
@@ -23580,6 +23670,11 @@ $c_Lmarge_frontend_CaosConfig$.prototype.footer__T = (function() {
 });
 $c_Lmarge_frontend_CaosConfig$.prototype.documentation__Lcaos_frontend_Documentation = (function() {
   return this.Lmarge_frontend_CaosConfig$__f_documentation
+});
+$c_Lmarge_frontend_CaosConfig$.prototype.mCRL2doc__T__T = (function(from) {
+  $m_sc_StringOps$();
+  var x = (("<p>This widget translates " + from) + " into an equivalent\n      |mCRL2 specification.</p>\n      |\n      |<p>For more information on the mCRL2 language, please visit\n      |<a target=\"_blank\" href=\"https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html\">\n      |https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html</a></p>\n      |\n      |<p> This translation is not modular, i.e., the RTS variant if flatenned into a single transition system\n      |before being translated into mCRL2. We are investigating a modular approach, encoding the activation/deactivation\n      |of transitions by parallel processes.</p>\n      |\n      |<p> To use this specification with the mCRL2 toolset, please start a new project in\n      |mcrl2ide, copy-paste the output of this widget into the main specification file, and\n      |then use the mCRL2 toolset to analyse it (e.g., generate the LTS, minimise it (using\n      |trace equivalence, bisimilarity, or other equivanlences), check properties, etc).</p>\n      |");
+  return $m_sc_StringOps$().stripMargin$extension__T__C__T(x, 124)
 });
 $c_Lmarge_frontend_CaosConfig$.prototype.examples__sc_Iterable = (function() {
   return this.Lmarge_frontend_CaosConfig$__f_examples

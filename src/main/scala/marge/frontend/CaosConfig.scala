@@ -21,7 +21,7 @@ import caos.sos.BranchBisim
 /** Object used to configure which analysis appear in the browser */
 object CaosConfig extends Configurator[FRTS]:
 
-  val justTS: Boolean = false // whether to only show TS-related analyses
+  val justTS: Boolean = true // whether to only show TS-related analyses
 
   val name = "FRETS: Animator of Featured Reactive Transition Systems" +
     (if justTS then " (TS only version)" else "")
@@ -111,7 +111,7 @@ object CaosConfig extends Configurator[FRTS]:
 
   def widgetsTS: List[(String,Widget)] = List(
     //  html("<h2>Main functionalities</h2>"),
-     "TS: Step-by-step" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaid, _.show, Mermaid).expand,
+     "Step-by-step" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaid, _.show, Mermaid).expand,
      "Number of states and edges"
        -> view((frts:FRTS) => {
        val rts = frts.getRTS
@@ -151,7 +151,7 @@ object CaosConfig extends Configurator[FRTS]:
                             rts.copy(inits = Multiset()+p._2),RTSSemantics,RTSSemantics))
           .mkString("\n\n")
        , Text),
-     "TS (as mCRL2)" ->
+     "As mCRL2" ->
        view((e:FRTS)=>
            var seed = 0;
            var rtsid = Map[RTS,Int]()
@@ -175,11 +175,11 @@ object CaosConfig extends Configurator[FRTS]:
              s"act\n  ${e.getRTS.edgs.flatMap(x=>x._2.map(y => clean(y._2.toString))).mkString(",")};\n" +
              s"proc\n${procs.toSet.mkString("\n")}"
          ,Text),
-     "TS (DFA)" -> lts((e:FRTS)=>
+     "As DFA" -> lts((e:FRTS)=>
        Set(e.getRTS), FinAut.detSOS(RTSSemantics),
        x => x.map(_.inits.toString).mkString(","),
        _.toString),
-     "TS (trace-equivalence minimal DFA)" -> ltsCustom(
+     "As a trace-equivalence minimal DFA" -> ltsCustom(
        (e:FRTS)=>
          val (i,s,_) = FinAut.minSOS(RTSSemantics,Set(e.getRTS))
          (i,s, x => x.map(_.inits.toString).mkString(","), _.toString)),
@@ -453,10 +453,10 @@ object CaosConfig extends Configurator[FRTS]:
       |(<a href="https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm">https://en.wikipedia.org/wiki/DFA_minimization</a>),
       |based on partition refinement of the underlying equivalence class.
       |This notion of indistinguishable relies on trace-equivalence and not on bisimilarity.""".stripMargin,
-    // "TS variant: as mCRL2" -> "More information on the mCRL2 syntax"
-    //   -> mCRL2doc("the RTS variant of the given FRTS"),
-    // "TS (as mCRL2)" -> "More information on the mCRL2 syntax"
-    //   -> mCRL2doc("the given TS"),
+    "TS variant: as mCRL2" -> "More information on the mCRL2 syntax"
+      -> mCRL2doc("the RTS variant of the given FRTS"),
+    "As mCRL2" -> "More information on the mCRL2 syntax"
+      -> mCRL2doc("the given TS"),
       
   )
 
