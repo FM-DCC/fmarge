@@ -421,6 +421,12 @@ button {
     background-color: rgb(230, 230, 230);
 }
 
+.mermaidFix {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
 
 /* FOR SMALLER SCREENS */
 @media (max-width: 750px) {

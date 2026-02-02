@@ -20,25 +20,31 @@ import caos.sos.BranchBisim
 
 /** Object used to configure which analysis appear in the browser */
 object CaosConfig extends Configurator[FRTS]:
-  val name = "FRETS: Animator of Featured Reactive Transition Systems"
-  override val languageName: String = "Input Featured Reactive TS"
+
+  val justTS: Boolean = false // whether to only show TS-related analyses
+
+  val name = "FRETS: Animator of Featured Reactive Transition Systems" +
+    (if justTS then " (TS only version)" else "")
+  override val languageName: String =
+    if justTS then "Input TS" else "Input Featured Reactive TS"
 
   val parser: String => FRTS = marge.syntax.Parser.parseProgram
 
   /** Examples of programs that the user can choose from. The first is the default one. */
-  val examples: Seq[Example] = List(
-    "Ex.2: simple TS pr1" -> "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 1,\n// with feature f1\ninit s0\ns0a --> s0: a "
+  val examples: Seq[Example] = (List(
+    "Ex.2: simple TS pr1" -> "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 1,\n// with feature f1\ninit s0\ns0 --> s0a: a "
       -> "Simple TS, obtained from the simple FRTS example after product 1, selecting feature f1. Presented in Fig. 1 and Example 2 in the companion paper.",
     "Ex.2: simple TS pr2" -> "// TS: Flatenned \"Simple FRTS\"\n// after selecting product 2,\n// with features f1 and f2,\n// and minimising it\ninit s0\ns0 --> sa: a \ns0 --> sb: b \nsa --> sab: b\nsb --> sab: a\nsb --> sb: b\nsab --> sab: b\nsb --> sc: c\nsab --> sc: c"
       -> "Simple TS, obtained from the simple FRTS example after product 2, with features f1 and f2, and minimising it. Presented in Fig. 1 and Example 2 in the companion paper.",
     "Ex.3: vending TS" -> "// Flatenned TS to model a vending machine\n// from the vending FRTS after selecting\n// features S, T, and P.\ninit e4\nx1 --> x2: pay\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y1: teaRefill\nz1 --> z2: pay\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill\ne4 --> z1: sodaRefill\ny1 --> x1: sodaRefill\nz1 --> x1: teaRefill"
       -> "TS obtained from flatenning the FRTS Vending example after the selecting product with features S and P. Presented in Fig. 2a and Example 3 in the companion paper.",
-    "Ex.4: equivalences" -> "// RTS to illustrate different\n// equivalences. States\n// s0 and q0 are trace\n// equivalent but not\n// bisimilar.\ninit s0\ns0-->s1:a\ns1-->s3:c\ns1-->s2:b\n\ninit q0\nq0-->q1:a\nq1-->q3:c\nq0-->q2:a\nq2-->q3:b\n\ncheck Tr(q0) = Tr(s0)\ncheck q0 ~ s0"
+    "Ex.4: equivalences" -> "// TS to illustrate different\n// equivalences. States\n// s0 and q0 are trace\n// equivalent but not\n// bisimilar.\ninit s0\ns0-->s1:a\ns1-->s3:c\ns1-->s2:b\n\ninit q0\nq0-->q1:a\nq1-->q3:c\nq0-->q2:a\nq2-->q3:b\n\ncheck Tr(q0) = Tr(s0)\ncheck q0 ~ s0"
       -> "RTS to illustrate different equivalences. States s0 and q0 are trace equivalent but not bisimilar. Presented in Example 4 in the companion paper.",
     "Ex.5: perm TS"
       -> "init s\ns --> sa: a\ns --> sb: b\ns --> sc: c\nsa --> sab: b\nsa --> sac: c\nsb --> sab: a\nsb --> sbc: c\nsc --> sac: a\nsc --> sbc: b\nsab --> sabc: c\nsac --> sabc: b\nsbc --> sabc: a"
       -> "TS that accepts all permutations of the actions a,b,c and their prefixes.",
-    "Ex.6: simple FTS" -> "// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sc:  c if f2\nsab --> sc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\""
+    ):List[Example]) ++ (if justTS then Nil else List(
+      "Ex.6: simple FTS" -> "// FTS: Flatenned \"Simple FRTS\"\n// without selecting any product\ninit s0\ns0  --> sa:  a if f1\ns0  --> sb:  b if f2\nsa  --> sab: b if f2\nsb  --> sab: a if f1\nsb  --> sb:  b if f2\nsab --> sab: b if f2\nsb  --> sc:  c if f2\nsab --> sc:  c if f2\n\nfm f1\nselect f1,f2; // try also just \"f1\""
       -> "Simple FTS, obtained from the simple FRTS example without selecting any product. Presented in Fig. 1 and Example 6 in the companion paper.",
     "Ex.7: vending FTS" -> "init e4\nx1 --> x2: pay if P\nx2 --> x3: change\nx3 --> x4: cancel\nx4 --> x1: return\nx3 --> x5: soda\nx3 --> x6: tea\nx5 --> x7: serve\nx6 --> x7: serve\nx7 --> x8: open\nx8 --> x9: take\nx9 --> x1: close\nx1 --> x6: tea if !P\nx1 --> x5: soda if !P\nx1 --> x1: sodaRefill\nx1 --> x1: teaRefill\ny1 --> y2: pay if P\ny2 --> y3: change\ny3 --> y4: cancel\ny4 --> y1: return\ny3 --> y5: tea\ny5 --> y6: serve\ny6 --> y7: open\ny7 --> y8: take\ny8 --> y1: close\ny1 --> y5: tea if !P\ny1 --> y1: teaRefill\nz1 --> z2: pay if P\nz2 --> z3: change\nz3 --> z4: cancel\nz4 --> z1: return\nz3 --> z5: soda\nz5 --> z6: serve\nz6 --> z7: open\nz7 --> z8: take\nz8 --> z1: close\nz1 --> z5: soda if !P\nz1 --> z1: sodaRefill\ne1 --> e2: open\ne2 --> e3: take\ne3 --> e4: close\nx5 --> y6: serveSodaGone\nx6 --> z6: serveTeaGone\ny5 --> e1: serveTeaGone\nz5 --> e1: serveSodaGone\ne4 --> y1: teaRefill if T\ne4 --> z1: sodaRefill if S\ny1 --> x1: sodaRefill if S\nz1 --> x1: teaRefill if T\nfm S || T\nselect S,T,P;"
       -> "FTS obtained from flatenning the FRTS Vending example before selecting any product. Presented in Fig. 2a and Example 7 in the companion paper.",
@@ -99,18 +105,89 @@ object CaosConfig extends Configurator[FRTS]:
       -> "Experiments with multiple components.",
     // "Vending (FRTS)" -> "init s1\ns1 --> s1: sodaRefill\ns1 --> s1: teaRefill\ns1 --> s2: pay\ns4 --> s1: return\ns2 --> s3: change\ns3 --> s4: cancel\ns3 --> s5: soda\ns3 --> s6: tea\ns5 --> s7: serve\ns5 --> s7: serveSodaGone\ns6 --> s7: serve\ns6 --> s7: serveTeaGone\ns7 --> s8: open\ns8 --> s9: take\ns9 --> s1: close\n\nsodaRefill ->> soda\nteaRefill ->> tea\nserveSodaGone --x soda\nserveTeaGone --x tea"
     //   -> "Experiment from the ongoing paper",
+  ))
+  /** Description of the widgets that appear in the dashboard. */
+  val widgets = if justTS then widgetsTS else widgetsFRTS
+
+  def widgetsTS: List[(String,Widget)] = List(
+    //  html("<h2>Main functionalities</h2>"),
+     "TS: Step-by-step" -> steps((e:FRTS)=>e.getRTS, RTSSemantics, RTS.toMermaid, _.show, Mermaid).expand,
+     "Number of states and edges"
+       -> view((frts:FRTS) => {
+       val rts = frts.getRTS
+       val rstates = rts.states.size
+       val simpleEdges = (for (_,dests) <- rts.edgs yield dests.size).sum
+       val (iniMin,sosMin,doneMin1) = caos.sos.FinAut.minSOS(RTSSemantics, Set(rts), 2000)
+       val (stMin, edsMin, doneMin2) = SOS.traverse(sosMin, iniMin, 2000)
+       val doneMin = doneMin1 && doneMin2
+       s"== TS (size: ${
+         rstates + simpleEdges
+       }) ==\nstates: ${
+         rstates
+       }\nedges: ${
+         simpleEdges
+       }"+
+       s"\n== TS as a minimal DFA (size: ${
+           if !doneMin then ">2000" else stMin.size + edsMin
+         }) ==\n" +
+         (if !doneMin then s"Stopped after traversing 2000 states"
+         else s"States: ${stMin.size}\nEdges: $edsMin")
+     },
+       Text),
+    //  html("<h2>Other functionalities</h2>"),
+     "Check properties" -> view[FRTS](e =>
+        val rts = e.getRTS
+        if e.equivs.isEmpty then
+          "No equivalence properties to check.\nUse the 'check' keyword in the RTS definition to add properties." +
+            " For example:\n\n" +
+            "check Tr(s0) = Tr(q0) // check trace equivalence\ncheck s0 ~ q0         // check bisimilarity"
+        else
+        e.equivs.map(p => if p._3
+            then s"== Checking ${p._1} ~ ${p._2} == \n" +
+                  StrongBisim.findBisimPP(rts.copy(inits = Multiset()+p._1),
+                                          rts.copy(inits = Multiset()+p._2))(using RTSSemantics,RTSSemantics)
+            else s"== Checking  Tr(${p._1}) = Tr(${p._2}) ==\n" +
+                  TraceEquiv(rts.copy(inits = Multiset()+p._1),
+                            rts.copy(inits = Multiset()+p._2),RTSSemantics,RTSSemantics))
+          .mkString("\n\n")
+       , Text),
+     "TS (as mCRL2)" ->
+       view((e:FRTS)=>
+           var seed = 0;
+           var rtsid = Map[RTS,Int]()
+           def fresh(rts:RTS): String = rtsid.get(rts) match
+             case Some(value) => s"s$value"
+             case None =>
+               rtsid += rts -> seed
+               seed += 1
+               s"s${seed-1}"
+           def clean(s:String) = s.replaceAll("/","_")
+           val rts = e.getRTS
+           val init = fresh(rts)
+           val (nfa,done) = caos.sos.FinAut.sosToNFA(RTSSemantics,Set(rts))
+           val emap = nfa.e.groupBy(_._1)
+           val procs = for (src,edgs) <- emap yield
+             s"  ${fresh(src)} = ${edgs.map(e =>
+               val rest = if emap.contains(e._3) then s". ${fresh(e._3)}" else ""
+               s"${clean(e._2.toString)} $rest"
+             ).mkString(" + ")};"
+           s"init $init;\n"+
+             s"act\n  ${e.getRTS.edgs.flatMap(x=>x._2.map(y => clean(y._2.toString))).mkString(",")};\n" +
+             s"proc\n${procs.toSet.mkString("\n")}"
+         ,Text),
+     "TS (DFA)" -> lts((e:FRTS)=>
+       Set(e.getRTS), FinAut.detSOS(RTSSemantics),
+       x => x.map(_.inits.toString).mkString(","),
+       _.toString),
+     "TS (trace-equivalence minimal DFA)" -> ltsCustom(
+       (e:FRTS)=>
+         val (i,s,_) = FinAut.minSOS(RTSSemantics,Set(e.getRTS))
+         (i,s, x => x.map(_.inits.toString).mkString(","), _.toString)),
+
   )
 
-//   val a = Feat("a")
-//   val b = Feat("b")
-//   val c = Feat("c")
-//   val d = Feat("d")
-////   val test1 = List((a && b) || c, a && (b || c), a || b, a-->b)
-//   val test1 = List(a, a&&b, a||b)
-//   val test = test1 ++ test1.map(x => FNot(x))
-
    /** Description of the widgets that appear in the dashboard. */
-   val widgets = List(
+  def widgetsFRTS = List(
 //     "View State (DB)" -> view[FRTS](_.toString, Text).expand,
      htmlLeft[FRTS]("""
             |<button class="tgBtn" id="frtsBtn">FRTS</button>
@@ -268,7 +345,7 @@ object CaosConfig extends Configurator[FRTS]:
        (e:FRTS)=>
          val (i,s,_) = FinAut.minSOS(RTSSemantics,Set(e.getRTS))
          (i,s, x => x.map(_.inits.toString).mkString(","), _.toString)),
-     "TS variant: trace-equivalent states" -> view(e =>
+     "TS variant: trace-equivalent states" -> view[FRTS](e =>
        val p = FinAut.partitionNFA( FinAut.sosToNFA(RTSSemantics,Set(e.getRTS))._1)
        p.map(r => r.map(x => x.inits.toString).mkString(",")).mkString(" - ")
        , Text),
@@ -310,12 +387,14 @@ object CaosConfig extends Configurator[FRTS]:
 
    )
 
-  override val toggles: Map[String, Set[String]] = Map(
-    "frtsBtn" -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("FRTS")),
-    "rtsBtn"  -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("RTS")),
-    "ftsBtn"  -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("FTS")),
-    "tsBtn"   -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("TS")),
-  )
+  override val toggles: Map[String, Set[String]] =
+    if justTS then Map() else
+    Map(
+      "frtsBtn" -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("FRTS")),
+      "rtsBtn"  -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("RTS")),
+      "ftsBtn"  -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("FTS")),
+      "tsBtn"   -> widgets.map(ex => ex._1).toSet.filter(_.startsWith("TS")),
+    )
 
   //// Documentation below
 
@@ -374,24 +453,30 @@ object CaosConfig extends Configurator[FRTS]:
       |(<a href="https://en.wikipedia.org/wiki/DFA_minimization#Hopcroft's_algorithm">https://en.wikipedia.org/wiki/DFA_minimization</a>),
       |based on partition refinement of the underlying equivalence class.
       |This notion of indistinguishable relies on trace-equivalence and not on bisimilarity.""".stripMargin,
-    "TS variant: as mCRL2" -> "More information on the mCRL2 syntax" ->
-      """<p>This widget translates the RTS variant of the given FRTS into an equivalent
-        |mCRL2 specification.</p>
-        |
-        |<p>For more information on the mCRL2 language, please visit
-        |<a target="_blank" href="https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html">
-        |https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html</a></p>
-        |
-        |<p> This translation is not modular, i.e., the RTS variant if flatenned into a single transition system
-        |before being translated into mCRL2. We are investigating a modular approach, encoding the activation/deactivation
-        |of transitions by parallel processes.</p>
-        |
-        |<p> To use this specification with the mCRL2 toolset, please start a new project in
-        |mcrl2ide, copy-paste the output of this widget into the main specification file, and
-        |then use the mCRL2 toolset to analyse it (e.g., generate the LTS, minimise it (using
-        |trace equivalence, bisimilarity, or other equivanlences), check properties, etc).</p>
-        |""".stripMargin,
+    // "TS variant: as mCRL2" -> "More information on the mCRL2 syntax"
+    //   -> mCRL2doc("the RTS variant of the given FRTS"),
+    // "TS (as mCRL2)" -> "More information on the mCRL2 syntax"
+    //   -> mCRL2doc("the given TS"),
+      
   )
+
+  def mCRL2doc(from:String): String =
+    s"""<p>This widget translates $from into an equivalent
+      |mCRL2 specification.</p>
+      |
+      |<p>For more information on the mCRL2 language, please visit
+      |<a target="_blank" href="https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html">
+      |https://www.mcrl2.org/web/user_manual/language_reference/mcrl2.html</a></p>
+      |
+      |<p> This translation is not modular, i.e., the RTS variant if flatenned into a single transition system
+      |before being translated into mCRL2. We are investigating a modular approach, encoding the activation/deactivation
+      |of transitions by parallel processes.</p>
+      |
+      |<p> To use this specification with the mCRL2 toolset, please start a new project in
+      |mcrl2ide, copy-paste the output of this widget into the main specification file, and
+      |then use the mCRL2 toolset to analyse it (e.g., generate the LTS, minimise it (using
+      |trace equivalence, bisimilarity, or other equivanlences), check properties, etc).</p>
+      |""".stripMargin
 //      """|A program <code>RG</code> is a Reactive Graph with a syntax that follows the following template:
 //         |<pre>
 //         |init = Initial State;
