@@ -113,8 +113,9 @@ object RTS:
   private def drawEdges(es:EdgeMap, rx:RTS, fresh:()=>Int, tip:String,
                           style:String, simple:Boolean=false)(using pk:Map[Edge,FExp]): String =
       (for (a,bs)<-es.toList; (b,c) <- bs.toList  yield
-        val c2 = if !pk.contains((a,b,c)) || pk((a,b,c))==FExp.FTrue
-                 then c.toString else s"$c if ${Show(pk((a,b,c))).replaceAll("¬","!")}"
+        val c2 = Show(c,pk.getOrElse((a,b,c),FExp.FTrue))
+          // if !pk.contains((a,b,c)) || pk((a,b,c))==FExp.FTrue
+                //  then c.toString else s"$c if ${Show(pk((a,b,c))).replaceAll("¬","!")}"
         val isRx = rx.rxEdges.contains((a,b,c))
         val line = if rx.act.contains((a,b,c)) then "---" else "-.-"
         val lbl = if c.n.isEmpty then "" else s"|$c2|"

@@ -58,6 +58,10 @@ object Show:
       .mkString(" & "))
       .mkString("\n")
 
+  def apply(guarded: (Any, FExp)): String =
+    if guarded._2==FExp.FTrue then
+      guarded._1.toString else
+      s"${guarded._1} if ${Show(guarded._2).replaceAll("¬","!")}"
 
   def apply(rx: RTS): String =
     s"[init]  ${rx.inits}\n[act]   ${apply(rx.act)}\n[edges] ${
